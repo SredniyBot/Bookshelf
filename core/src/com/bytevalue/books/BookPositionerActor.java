@@ -6,17 +6,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public abstract class BookPositionerActor extends Actor {
+import org.graalvm.compiler.asm.amd64.AMD64VectorAssembler;
 
-    private final float minPressureTime=0.25f;
-    private final Vector2 upOffset=new Vector2(0,20);
+public abstract class BookPositionerActor extends Actor {
 
     private BookContainer bookContainer;
     private final Vector2 bias;
 
     private Viewport viewport;
-    private float pressureTime=0;
-    private boolean isPressuredBefore =false;
     private boolean isTouchedBefore =false;
 
     private boolean isReturning=false;
@@ -59,58 +56,33 @@ public abstract class BookPositionerActor extends Actor {
         }
     }
 
-    public boolean moveToUp(float delta) {
-        return moveTo(delta,new Vector2(upOffset).add(getStartPosition()));
-    }
-
-
     @Override
     public void act(float delta) {
-
         if(isReturning){
-            isReturning=!moveToUp(delta);
+            isReturning=!moveToHome(delta);
             return;
         }
-
         if (Gdx.input.isTouched()) {
             Vector2 touch = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-            if(contains(touch)) {
-                pressureTime += delta;
+
+            onScreenTouch(delta,touch);
+            if(isTouchedBefore||contains(touch)) {
+                if(!isTouchedBefore)onTouch();
+                isPressed(touch);
                 isTouchedBefore=true;
             }else {
-                if (pressureTime>0&&pressureTime<minPressureTime){
-                    justTouched();
-                    if (isTouchedBefore){
-                        onRelease();
-                        pressureTime=0;
-                        isTouchedBefore=false;
-                        isPressuredBefore =false;
-                    }
+                if(isTouchedBefore){
+                    onRelease();
+                    isTouchedBefore=false;
                 }
-            }
-            if (pressureTime >= minPressureTime) {
-                if (!isPressuredBefore){
-                    onStartPressure();
-                    isPressuredBefore =true;
-                }
-                isPressed(touch);
             }
         }else {
-            if (pressureTime>=minPressureTime)onPressureRelease();
-            if (pressureTime>0&&pressureTime<minPressureTime){
-                justTouched();
-            }
-            if (isTouchedBefore){
+           if (isTouchedBefore){
                 onRelease();
-                pressureTime=0;
                 isTouchedBefore=false;
-                isPressuredBefore =false;
             }
         }
     }
-
-
-
 
     @Override
     @Deprecated
@@ -128,6 +100,11 @@ public abstract class BookPositionerActor extends Actor {
         bias.set(x-getStartPosition().x,y-getStartPosition().y);
         resetRectangle();
     }
+    public void setPosition(Vector2 vector2) {
+        bias.set(vector2.x-getStartPosition().x,vector2.y-getStartPosition().y);
+        resetRectangle();
+    }
+
     @Override
     public void setWidth(float width) {
         super.setWidth(width);
@@ -144,13 +121,19 @@ public abstract class BookPositionerActor extends Actor {
         resetRectangle();
     }
     public void setBookContainer(BookContainer bookContainer) {
+        bias.set(getRealX()-bookContainer.getStartPosition(getPositionNumber()).x,
+                getRealY()-bookContainer.getStartPosition(getPositionNumber()).y);
         this.bookContainer = bookContainer;
+
     }
-    public abstract void justTouched();
+    public void setBookContainerF(BookContainer bookContainer) {
+        this.bookContainer = bookContainer;
+
+    }
     public abstract void isPressed(Vector2 touch);
-    public abstract void onStartPressure();
     public abstract void onRelease();
-    public abstract void onPressureRelease();
+    public abstract void onTouch();
+    public abstract void onScreenTouch(float delta,Vector2 touch);
     public abstract int getPositionNumber();
     public Vector2 getStartPosition(){
         return bookContainer.getStartPosition(getPositionNumber());
@@ -170,9 +153,6 @@ public abstract class BookPositionerActor extends Actor {
     public boolean contains(Vector2 vector2){
         return rectangle.contains(vector2);
     }
-    public Vector2 getUpOffset(){
-        return upOffset;
-    }
 
     public void startReturning() {
         isReturning= true;
@@ -183,4 +163,7 @@ public abstract class BookPositionerActor extends Actor {
                 getWidth(),getHeight());
     }
 
+    public BookContainer getBookContainer() {
+        return bookContainer;
+    }
 }

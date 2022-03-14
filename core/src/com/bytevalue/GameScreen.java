@@ -4,22 +4,26 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen,ActivitySwitcher{
 
     private final OrthographicCamera mCamera;
     private final Viewport mViewport;
-    private GameStage mActiveStage;
-
+    private Stage mActiveStage;
+    private GameStage gameStage;
+    private PauseStage pauseStage;
 
 
     public GameScreen() {
         mCamera = new OrthographicCamera();
         mViewport = new FillViewport(BookSorter.SCREEN_WIDTH, BookSorter.SCREEN_HEIGHT, mCamera);
-        mActiveStage = new GameStage(mViewport);
+        GameStage gameStage =new GameStage(mViewport,this);
+        PauseStage pauseStage =new PauseStage(mViewport);
+        mActiveStage = gameStage;
     }
 
 
@@ -64,5 +68,10 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         mActiveStage.dispose();
+    }
+
+    @Override
+    public void switchActivity() {
+        mActiveStage=pauseStage;
     }
 }

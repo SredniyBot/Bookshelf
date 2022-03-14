@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.bytevalue.TextureIds;
 
 public class Book extends BookPositionerActor implements Comparable<Book>{
@@ -13,89 +14,59 @@ public class Book extends BookPositionerActor implements Comparable<Book>{
     private final BookHandler bookHandler;
 
     private int positionNumber;
+    private boolean selected;
 
     private Vector2 destination;
-    private boolean isMoving = false;
-    private boolean isSelected =false;
 
     Book(int id,int positionNumber,BookHandler bookHandler,BookContainer bookContainer){
-        this.id=id;
+        this.id=id+5;
         this.positionNumber=positionNumber;
         this.bookHandler = bookHandler;
-        setBookContainer(bookContainer);
+        destination=new Vector2(0,0);
+        setBookContainerF(bookContainer);
         setZIndex(2);
-        region= TextureIds.getTextureById(id);
+        region= TextureIds.getTextureById(this.id);
         setSize(bookContainer.getBookWidth(),bookContainer.getBookHeight());
     }
 
-
-    public void changeSelection(){
-        isSelected =!isSelected;
-        isMoving =true;
-        if (isSelected) {
-            region= TextureIds.getTextureById(1);
-            destination=new Vector2(getStartPosition()).add(getUpOffset());
-        } else {
-            region=TextureIds.getTextureById(2);
-            destination=getStartPosition();
-        }
-    }
-
-    public boolean isSelected() {
-        return isSelected;
-    }
-
-
     @Override
     public void act(float delta) {
-        if (isMoving) {
-            isMoving =!moveTo(delta,destination);
+        if (bookHandler.isShifting()){
+            moveToHome(delta);
+            return;
         }
         super.act(delta);
-        if(bookHandler.isBookPressured()&&isSelected){
-            moveTo(delta,bookHandler.getMainBookPosition());
-        }
     }
 
 
 
     @Override
-    public void justTouched() {
-        if (!bookHandler.isBookPressured()) {
-            changeSelection();
+    public void onRelease() {
+        bookHandler.release();
+    }
+
+    @Override
+    public void onTouch() {
+        if(!bookHandler.isBookPressured()) {
+            Gdx.input.vibrate(20);
             bookHandler.selectBook(this);
         }
     }
 
     @Override
-    public void onRelease() {
-
-    }
-
-    @Override
-    public void onStartPressure() {
-        if(!bookHandler.isBookPressured()) {
-            if (!isSelected) {
-                justTouched();
-            }
-            Gdx.input.vibrate(20);
-            bookHandler.setBookPressured(true);
-            bookHandler.setMainBook(this);
+    public void onScreenTouch(float delta,Vector2 touch) {
+        if (selected){
+            destination.set(touch.x - getWidth() / 2, touch.y - getHeight() / 2);
+            moveTo(delta,destination);
         }
     }
+
 
     @Override
     public void isPressed(Vector2 touch) {
-        setPosition(touch.x - getWidth() / 2, touch.y - getHeight() / 2);
+
     }
 
-
-    @Override
-    public void onPressureRelease() {
-        if(isSelected) {
-            bookHandler.release();
-        }
-    }
 
 
     @Override
@@ -119,6 +90,29 @@ public class Book extends BookPositionerActor implements Comparable<Book>{
 
     public void setDestination(Vector2 destination){
         this.destination=destination;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Array<Book> getGoodNeighbours(){
+        return getBookContainer().getSameNeighbours(this);
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void replacePosition(int positionNumber){
+        Vector2 c=getPosition();
+        setPositionNumber(positionNumber);
+        setPosition(c);
+        startReturning();
     }
 
 }
