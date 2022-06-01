@@ -4,15 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.bytevalue.BookshelfPositioner;
 
-import java.util.Iterator;
 import java.util.Random;
 
 public class Bookshelf implements BookContainer {
 
-    private final Rectangle rectangle;
-    private final BookshelfPositioner bookPositioner;
+    private final Rectangle bookshelfRectangle;
+
+    private final BookDisposer bookDisposer;
     private final BookHandler bookHandler;
     private boolean induced=false;
     private int shift=1000;
@@ -21,13 +20,15 @@ public class Bookshelf implements BookContainer {
 
     private Array<Book> books;
 
-    Bookshelf(float y, BookshelfPositioner bookPositioner,BookHandler bookHandler){
-        this.bookPositioner = bookPositioner;
+    Bookshelf(float y, BookDisposer bookDisposer, BookHandler bookHandler){
+        this.bookDisposer = bookDisposer;
         this.bookHandler=bookHandler;
-        rectangle=new Rectangle();
+        bookshelfRectangle =new Rectangle();
         bookPositions=createBookPositions();
         resetPositions(y);
-        fillWithRandomBooks(littleRandom());
+
+
+        fillWithRandomBooks(littleRandom());            //TODO rewrite creation of books
     }
 
     public Array<Book> renew(float y){
@@ -58,11 +59,11 @@ public class Bookshelf implements BookContainer {
         int i=0;
         int id=0;
         for (int num:numberOfBooks){
-            if (i>= bookPositioner.getBookshelfSize())break;
+            if (i>= bookDisposer.getBookshelfSize())break;
             for (int q=0;q<num;q++){
-                if (i>= bookPositioner.getBookshelfSize())break;
+                if (i>= bookDisposer.getBookshelfSize())break;
                 Book book=new Book(id,i,bookHandler,this);
-                book.setViewport(bookPositioner.getViewport());
+                book.setViewport(bookDisposer.getViewport());
                 book.setVisible(true);
                 books.add(book);
                 i++;
@@ -74,28 +75,28 @@ public class Bookshelf implements BookContainer {
 
     private Array<BookPosition> createBookPositions(){
         Array<BookPosition> bookPositions =new Array<>();
-        for(int i=0;i<bookPositioner.getBookshelfSize();i++){
-            bookPositions.add(new BookPosition(bookPositioner.getPositions()[i],0,
-                    (int)bookPositioner.getBookWidth(),(int)bookPositioner.getBookHeight()));
+        for(int i = 0; i< bookDisposer.getBookshelfSize(); i++){
+            bookPositions.add(new BookPosition(bookDisposer.getPositions()[i],0,
+                    (int) bookDisposer.getBookWidth(),(int) bookDisposer.getBookHeight()));
         }
         return bookPositions;
     }
 
     public void resetPositions(float y){
-        rectangle.set(bookPositioner.getPositions()[0],y,
-                bookPositioner.getBookWidth()*bookPositioner.getBookshelfSize(),
-                bookPositioner.getBookHeight());
+        bookshelfRectangle.set(bookDisposer.getPositions()[0],y,
+                bookDisposer.getBookWidth()* bookDisposer.getBookshelfSize(),
+                bookDisposer.getBookHeight());
         for (int i=0;i<bookPositions.size;i++){
-            bookPositions.get(i).set(bookPositioner.getPositions()[i],
+            bookPositions.get(i).set(bookDisposer.getPositions()[i],
                     y,
-                    bookPositioner.getBookWidth(),
-                    bookPositioner.getBookHeight());
+                    bookDisposer.getBookWidth(),
+                    bookDisposer.getBookHeight());
         }
     }
 
     public void shuffle(){
         Array<Integer> positions=new Array<>();
-        for (int i=0;i<bookPositioner.getBookshelfSize();i++){
+        for (int i = 0; i< bookDisposer.getBookshelfSize(); i++){
             positions.add(i);
         }
         positions.shuffle();
@@ -111,7 +112,7 @@ public class Bookshelf implements BookContainer {
     }
 
     @Override
-    public Array<Book> getSameNeighbours(Book book) {
+    public Array<Book> getSimilarNeighbours(Book book) {
         Array<Book> goodNeighbours=new Array<>();
         int pos= book.getPositionNumber()-1;
         boolean next=true;
@@ -132,12 +133,12 @@ public class Bookshelf implements BookContainer {
 
     @Override
     public int getBookWidth() {
-        return (int)bookPositioner.getBookWidth();
+        return (int) bookDisposer.getBookWidth();
     }
 
     @Override
     public int getBookHeight() {
-        return (int)bookPositioner.getBookHeight();
+        return (int) bookDisposer.getBookHeight();
     }
 
     @Override
@@ -177,8 +178,8 @@ public class Bookshelf implements BookContainer {
     }
 
     public int checkCollisionAndAct(Vector2 touch,int size){
-        if(rectangle.contains(touch)){
-            if(size+books.size<=bookPositioner.getBookshelfSize()){
+        if(bookshelfRectangle.contains(touch)){
+            if(size+books.size<= bookDisposer.getBookshelfSize()){
                 int pos=getPositionCollision(touch);
                 if(pos==-1)return -1;
                 if(shift!=pos){
@@ -191,7 +192,7 @@ public class Bookshelf implements BookContainer {
                     moveBooks(pos,size);
                 }
                 return pos;
-            }else if(books.size!=bookPositioner.getBookshelfSize()){
+            }else if(books.size!= bookDisposer.getBookshelfSize()){
                 int pos=getPositionCollision(touch);
                 if(pos==-1)return -1;
                 if(shift!=pos){
@@ -201,7 +202,7 @@ public class Bookshelf implements BookContainer {
                 }
                 if(!induced){
                     induced=true;
-                    moveBooks(pos,bookPositioner.getBookshelfSize()-books.size);
+                    moveBooks(pos, bookDisposer.getBookshelfSize()-books.size);
                 }
                 return pos;
             }
@@ -237,7 +238,7 @@ public class Bookshelf implements BookContainer {
     public Array<Book> insertBooks(Array<Book> selectedBooks) {
         collectBooks();
         shift=Math.min(shift,books.size);
-        int bookBias=Math.min(selectedBooks.size,bookPositioner.getBookshelfSize()-books.size);
+        int bookBias=Math.min(selectedBooks.size, bookDisposer.getBookshelfSize()-books.size);
         for (Book book:books){
             if (book.getPositionNumber()>=shift){
                 book.replacePosition(book.getPositionNumber()+bookBias);
@@ -259,15 +260,15 @@ public class Bookshelf implements BookContainer {
         for (int i=0;i<books.size;i++){
             if(books.get(i).getId()==books.get(0).getId())count++;
         }
-        return count == bookPositioner.getBookshelfSize();
+        return count == bookDisposer.getBookshelfSize();
     }
 
     public void moveDown(float deltaY){
-        resetPositions(rectangle.y-deltaY);
-        for (Book book:books)book.getPositionNumber();
+        resetPositions(bookshelfRectangle.y-deltaY);
+        for (Book book:books)book.getPositionNumber();          //TODO ???
     }
 
     public float getY(){
-        return rectangle.y;
+        return bookshelfRectangle.y;
     }
 }

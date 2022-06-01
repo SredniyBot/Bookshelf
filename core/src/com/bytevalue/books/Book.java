@@ -7,25 +7,24 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bytevalue.TextureIds;
 
-public class Book extends BookPositionerActor implements Comparable<Book>{
+public class Book extends BookLocation implements Comparable<Book>{
 
-    private int id;
-    private TextureRegion region;
+    private final int id;
+    private final TextureRegion region;
     private final BookHandler bookHandler;
-
     private int positionNumber;
     private boolean selected;
 
-    private Vector2 destination;
+    private final Vector2 destination;
 
     Book(int id,int positionNumber,BookHandler bookHandler,BookContainer bookContainer){
-        this.id=id+5;
+        this.id=id%12; //TODO
         this.positionNumber=positionNumber;
         this.bookHandler = bookHandler;
         destination=new Vector2(0,0);
         setBookContainerF(bookContainer);
         setZIndex(2);
-        region= TextureIds.getTextureById(this.id);
+        region= TextureIds.getBookTextureById(this.id);
         setSize(bookContainer.getBookWidth(),bookContainer.getBookHeight());
     }
 
@@ -37,7 +36,6 @@ public class Book extends BookPositionerActor implements Comparable<Book>{
         }
         super.act(delta);
     }
-
 
 
     @Override
@@ -67,8 +65,6 @@ public class Book extends BookPositionerActor implements Comparable<Book>{
 
     }
 
-
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(region, getRealX(), getRealY(), getOriginX(), getOriginY(),
@@ -88,16 +84,12 @@ public class Book extends BookPositionerActor implements Comparable<Book>{
         this.positionNumber = positionNumber;
     }
 
-    public void setDestination(Vector2 destination){
-        this.destination=destination;
-    }
-
     public int getId() {
         return id;
     }
 
     public Array<Book> getGoodNeighbours(){
-        return getBookContainer().getSameNeighbours(this);
+        return getBookContainer().getSimilarNeighbours(this);
     }
 
     public void setSelected(boolean selected) {

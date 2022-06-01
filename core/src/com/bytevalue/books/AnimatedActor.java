@@ -1,4 +1,4 @@
-package com.bytevalue;
+package com.bytevalue.books;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;

@@ -7,18 +7,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bytevalue.pause.PauseStage;
 
 
-public class GameScreen implements Screen,ActivitySwitcher{
+public class MainScreen implements Screen, ActivitySwitcher{
 
     private final OrthographicCamera mCamera;
     private final Viewport mViewport;
     private Stage mActiveStage;
+
     private GameStage gameStage;
     private PauseStage pauseStage;
 
 
-    public GameScreen() {
+    public MainScreen() {
         mCamera = new OrthographicCamera();
         mViewport = new FillViewport(BookSorter.SCREEN_WIDTH, BookSorter.SCREEN_HEIGHT, mCamera);
         GameStage gameStage =new GameStage(mViewport,this);

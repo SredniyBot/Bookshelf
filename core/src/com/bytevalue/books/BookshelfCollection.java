@@ -3,56 +3,52 @@ package com.bytevalue.books;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bytevalue.ActorAdditor;
-import com.bytevalue.BookshelfPositioner;
-import java.util.HashSet;
-import java.util.Set;
+import com.bytevalue.BookSorter;
+import com.bytevalue.GameStage;
+import com.bytevalue.TextureIds;
 
-public class BookshelfCollection extends Actor implements BookshelfPositioner,BookHandler {
+public class BookshelfCollection extends Actor implements BookDisposer {
 
-    private final int size=12;
-    private final float w=36,h=163;
+    private final Array<Bookshelf> bookshelves;
+    private final int bookshelfSize =12;
+    private final float bookW =35, bookH =160;
     private final int [] xPositions;
     private final Viewport viewport;
     private float backgroundY;
     private float bias;
-    private final Texture texture;
-    private final ActorAdditor actorAdditor;
+    private final TextureRegion backgroundTexture;
+    private final TextureRegion topTexture;
 
-    private final Array<Bookshelf> bookshelves;
 
-    private final Array<Book> selectedBooks;
-    private BookContainer selectedBooksContainer;
-    private Bookshelf currentBookshelf;
-
-    private boolean bookPressured =false;
+    private final ActorAdder actorAdder;
+    private final BookHandler bookHandler;
     private boolean shifting =false;
 
 
-    public BookshelfCollection(Viewport viewport, ActorAdditor actorAdditor){
-        this.actorAdditor=actorAdditor;
+    public BookshelfCollection(Viewport viewport, ActorAdder actorAdder,BookHandler bookHandler){
+        this.actorAdder = actorAdder;
         this.viewport=viewport;
-        selectedBooks=new Array<>();
-        texture=new Texture(Gdx.files.internal("shelf3.png"));
-        backgroundY=0;
-        xPositions=getXPositions();
+        this.bookHandler=bookHandler;
+        bookHandler.setBookshelfCollection(this);
+
         bookshelves=new Array<>();
+
+        backgroundTexture = TextureIds.getBackgroundTexture();
+        topTexture=TextureIds.getTopTexture();
+        backgroundY=0;                                                           //TODO
+        xPositions=getXPositions();
     }
 
-    public Bookshelf generateBookshelf(int y){
-        Bookshelf bookshelf=new Bookshelf(y,this,this);
-        bookshelves.add(bookshelf);
-        return bookshelf;
-    }
+
 
     private int[] getXPositions() {
-        int [] pos = new int[size];
-        for (int i=0;i<size;i++){
-            pos[i]= (int) (texture.getWidth()/2-432/2+w*i);
+        int [] pos = new int[bookshelfSize];
+        for (int i = 0; i< bookshelfSize; i++){
+            pos[i]= (int) (backgroundTexture.getRegionWidth()/2-420/2+ bookW *i);
         }
         return pos;
     }
@@ -64,7 +60,7 @@ public class BookshelfCollection extends Actor implements BookshelfPositioner,Bo
 
     @Override
     public int getBookshelfSize() {
-        return size;
+        return bookshelfSize;
     }
 
     @Override
@@ -74,120 +70,65 @@ public class BookshelfCollection extends Actor implements BookshelfPositioner,Bo
 
     @Override
     public float getBookWidth() {
-        return w;
+        return bookW;
     }
 
     @Override
     public float getBookHeight() {
-        return h;
+        return bookH;
     }
 
 
     @Override
     public void act(float delta) {
-
         if(shifting){
             float velocity= (bias * delta *5);
             backgroundY-=velocity;
             bias-=velocity;
-            if (backgroundY<=-texture.getHeight())backgroundY+=texture.getHeight();
+            if (backgroundY<=-backgroundTexture.getRegionHeight())backgroundY+= backgroundTexture.getRegionHeight();
             for (Bookshelf bookshelf:bookshelves){
                 bookshelf.moveDown(velocity);
-                if(bookshelf.getY()+150<0)reorganizeBookshelf(bookshelf);
+                if(bookshelf.getY()+ bookH <0)reorganizeBookshelf(bookshelf);
             }
             if(bias<=1){
                 backgroundY-=bias;
-                bias=0;
                 for (Bookshelf bookshelf:bookshelves){
                     bookshelf.moveDown(bias);
                     if(bookshelf.getY()+150<0)reorganizeBookshelf(bookshelf);
                 }
+                bias=0;
                 shifting=false;
-                bookPressured=false;
-            }
-            return;
-        }
-        if (Gdx.input.isTouched()){
-            Vector2 touch = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
-            if(bookPressured) {
-                boolean findIntersection=false;
-                for (Bookshelf bookshelf : bookshelves) {
-                    if(bookshelf.checkCollisionAndAct(touch, selectedBooks.size)!=-1){
-                        currentBookshelf=bookshelf;
-                        findIntersection=true;
-                    }
-                }
-                if (!findIntersection)currentBookshelf=null;
             }
         }
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(texture,0,backgroundY);
-        batch.draw(texture,0,backgroundY+texture.getHeight());
+        batch.draw(backgroundTexture,0,backgroundY);
+        batch.draw(backgroundTexture,0,backgroundY+ backgroundTexture.getRegionHeight());
+        batch.draw(topTexture,0, BookSorter.SCREEN_HEIGHT-topTexture.getRegionHeight());
     }
 
-    @Override
-    public void selectBook(Book book) {
-        selectedBooks.clear();
-        selectedBooks.add(book);
-        selectedBooks.addAll(book.getGoodNeighbours());
-        bookPressured=true;
-        for (Book selected:selectedBooks){
-            selected.setSelected(true);
-            selected.setZIndex(1000);
-        }
-        selectedBooksContainer=book.getBookContainer();
-        selectedBooksContainer.collectBooks();
-    }
-
-
-    @Override
-    public boolean isBookPressured() {
-        return bookPressured;
-    }
-
-    @Override
-    public boolean isShifting() {
-        return shifting;
-    }
-
-
-    @Override
-    public void release() {
-        bookPressured=false;
-        if(currentBookshelf==null){
-            for (Book book:selectedBooks){
-                book.startReturning();
-                book.setSelected(false);
-            }
-            selectedBooksContainer.returnBooks(selectedBooks);
-            Gdx.input.vibrate(40);
-        }else {
-            Array<Book> notfited=currentBookshelf.insertBooks(selectedBooks);
-            for (Book book:notfited){
-                book.startReturning();
-                book.setSelected(false);
-            }
-            selectedBooksContainer.returnBooks(notfited);
-
-            if (currentBookshelf.isDone())startBias(currentBookshelf.getStartPosition(0).y);
-        }
-        selectedBooks.clear();
-    }
 
     public void startBias(float y){
         shifting=true;
-        bookPressured=true;
-        bias=y+213-20;
+        bias=y+200-10;//TODO rewrite
+    }
+    public Bookshelf generateBookshelf(int y){
+        Bookshelf bookshelf=new Bookshelf(y,this,bookHandler);
+        bookshelves.add(bookshelf);
+        return bookshelf;
+    }
+    private void reorganizeBookshelf(Bookshelf bookshelf){      //TODO refactor
+        Array<Book> newBooks=bookshelf.renew(bookshelf.getY()+200*6);
+        for (Book book:newBooks) actorAdder.addActor(book);
     }
 
-    private void reorganizeBookshelf(Bookshelf bookshelf){
-        Array<Book> newBooks=bookshelf.renew(bookshelf.getY()+213*7-1);
-        for (Book book:newBooks)actorAdditor.addActor(book);
+    public Array<Bookshelf> getBookshelves() {
+        return bookshelves;
     }
 
-
-
+    public boolean isShifting() {
+        return shifting;
+    }
 }

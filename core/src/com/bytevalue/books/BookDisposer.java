@@ -1,8 +1,8 @@
-package com.bytevalue;
+package com.bytevalue.books;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public interface BookshelfPositioner {
+public interface BookDisposer {
     int[] getPositions();
     int getBookshelfSize();
     Viewport getViewport();

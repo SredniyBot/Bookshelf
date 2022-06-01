@@ -8,7 +8,7 @@ public interface BookContainer {
 
     Vector2 getStartPosition(int positionNumber);
 
-    Array<Book> getSameNeighbours(Book book);
+    Array<Book> getSimilarNeighbours(Book book);
 
 
     void collectBooks();

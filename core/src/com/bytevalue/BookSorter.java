@@ -9,18 +9,17 @@ public class BookSorter extends Game {
 	public static float VIEWPORT_LEFT;
 	public static float VIEWPORT_RIGHT;
 
-	private GameScreen mGameScreen;
+	private MainScreen mMainScreen;
 
 	@Override
 	public void create () {
-		mGameScreen = new GameScreen();
-		setScreen(mGameScreen);
+		mMainScreen = new MainScreen();
+		setScreen(mMainScreen);
 	}
 
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
-
 		float aspectRatio = (float) width / height;
 		float viewportWidth = SCREEN_HEIGHT * aspectRatio;
 		VIEWPORT_LEFT = (SCREEN_WIDTH - viewportWidth) / 2;
@@ -30,6 +29,6 @@ public class BookSorter extends Game {
 	@Override
 	public void dispose() {
 		super.dispose();
-		mGameScreen.dispose();
+		mMainScreen.dispose();
 	}
 }

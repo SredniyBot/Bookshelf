@@ -6,9 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import org.graalvm.compiler.asm.amd64.AMD64VectorAssembler;
-
-public abstract class BookPositionerActor extends Actor {
+public abstract class BookLocation extends Actor {
 
     private BookContainer bookContainer;
     private final Vector2 bias;
@@ -20,7 +18,7 @@ public abstract class BookPositionerActor extends Actor {
 
     private final Rectangle rectangle;
 
-    BookPositionerActor(){
+    BookLocation(){
         bias=new Vector2(0,0);
         rectangle=new Rectangle(getX(),getY(),getWidth(),getHeight());
     }

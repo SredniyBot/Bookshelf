@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 
 public class BookPosition extends Rectangle {
 
-
     BookPosition(int x,int y,int w,int h){
         set(x,y,w,h);
     }
