@@ -4,23 +4,25 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.bytevalue.Vibrator;
+import com.bytevalue.service.SoundService;
+import com.bytevalue.service.VibrationService;
 
 public class BookHandler extends Actor {
 
-    private Array<Book> selectedBooks;
+
+    private final Array<Book> selectedBooks;
     private BookContainer containerOfSelectedBooks;
     private Bookshelf currentBookshelf;
     private boolean bookPressured =false;
 
-    private BookshelfCollection bookshelfCollection;
+    private Locket locket;
 
     public BookHandler(){
         selectedBooks=new Array<>();
     }
 
-    public void setBookshelfCollection(BookshelfCollection bookshelfCollection) {
-        this.bookshelfCollection = bookshelfCollection;
+    public void setBookshelfCollection(Locket locket) {
+        this.locket = locket;
     }
 
     public void selectBook(Book book) {
@@ -39,11 +41,11 @@ public class BookHandler extends Actor {
     @Override
     public void act(float delta) {
         if (Gdx.input.isTouched()){
-            Vector2 touch = bookshelfCollection.getViewport()
+            Vector2 touch = locket.getBookDisposer().getViewport()
                     .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
             if(bookPressured) {
                 boolean intersects=false;
-                for (Bookshelf bookshelf : bookshelfCollection.getBookshelves()) {
+                for (Bookshelf bookshelf : locket.getBookshelves()) {
                     if(bookshelf.checkCollisionAndAct(touch, selectedBooks.size)!=-1){//bookshelf is not full
                         currentBookshelf=bookshelf;
                         intersects=true;
@@ -62,7 +64,7 @@ public class BookHandler extends Actor {
                 book.setSelected(false);
             }
             containerOfSelectedBooks.returnBooks(selectedBooks);
-            Vibrator.vibrate(40);
+            VibrationService.vibrate(40);
         }else {
             Array<Book> extraBooks=currentBookshelf.insertBooks(selectedBooks);
             for (Book book:extraBooks){
@@ -72,10 +74,12 @@ public class BookHandler extends Actor {
             containerOfSelectedBooks.returnBooks(extraBooks);
 
             if (currentBookshelf.isDone())
-                bookshelfCollection.startBias(currentBookshelf.getY());
+                locket.complete(currentBookshelf);
         }
         selectedBooks.clear();
         currentBookshelf=null;
+
+        SoundService.playStandSound();
     }
 
 
@@ -84,7 +88,8 @@ public class BookHandler extends Actor {
     }
 
     public boolean isShifting() {
-        return bookshelfCollection.isShifting();
+        return locket.isShifting();
     }
 
 }
+

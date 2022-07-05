@@ -6,12 +6,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.ActivitySwitcher;
-import com.bytevalue.TextureIds;
-
-import javax.print.DocFlavor;
+import com.bytevalue.service.TextureService;
 
 public class Pause extends Actor {
 
@@ -23,7 +20,7 @@ public class Pause extends Actor {
 
 
     Pause(Viewport viewport, ActivitySwitcher activitySwitcher){
-        textureRegion= TextureIds.getTextureByStr("");
+        textureRegion= TextureService.getTextureByStr("");
         this.viewport=viewport;
         rectangle=new Rectangle(400,400,100,100);
         this.activitySwitcher=activitySwitcher;

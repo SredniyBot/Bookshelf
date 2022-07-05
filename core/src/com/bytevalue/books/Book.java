@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.bytevalue.TextureIds;
+import com.bytevalue.service.TextureService;
 
 public class Book extends BookLocation implements Comparable<Book>{
 
@@ -18,13 +18,13 @@ public class Book extends BookLocation implements Comparable<Book>{
     private final Vector2 destination;
 
     Book(int id,int positionNumber,BookHandler bookHandler,BookContainer bookContainer){
-        this.id=id%12; //TODO
+        this.id=id;
         this.positionNumber=positionNumber;
         this.bookHandler = bookHandler;
         destination=new Vector2(0,0);
         setBookContainerF(bookContainer);
         setZIndex(2);
-        region= TextureIds.getBookTextureById(this.id);
+        region= TextureService.getBookTextureById(this.id);
         setSize(bookContainer.getBookWidth(),bookContainer.getBookHeight());
     }
 
@@ -40,6 +40,7 @@ public class Book extends BookLocation implements Comparable<Book>{
 
     @Override
     public void onRelease() {
+        if (selected) ///TODO
         bookHandler.release();
     }
 
