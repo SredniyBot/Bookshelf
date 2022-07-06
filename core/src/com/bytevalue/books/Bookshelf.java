@@ -1,10 +1,10 @@
 package com.bytevalue.books;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bytevalue.service.SoundService;
+import com.bytevalue.service.VibrationService;
 
 import java.util.HashMap;
 
@@ -71,19 +71,6 @@ public class Bookshelf implements BookContainer {
                     bookDisposer.getBookWidth(),
                     bookDisposer.getBookHeight());
         }
-    }
-
-    @Deprecated
-    public void shuffle(){
-        Array<Integer> positions=new Array<>();
-        for (int i = 0; i< bookDisposer.getBookshelfSize(); i++){
-            positions.add(i);
-        }
-        positions.shuffle();
-        for (int i=0;i<books.size;i++){
-            books.get(i).replacePosition(positions.get(i));
-        }
-        collectBooks();
     }
 
     @Override
@@ -207,13 +194,13 @@ public class Bookshelf implements BookContainer {
 
     private void moveBooks(int pos,int size){
         if (pos<books.size){
-            Gdx.input.vibrate(10);
+            VibrationService.vibrate(10);
+            SoundService.playMoveSound();
             for (Book book:books){
                 if(book.getPositionNumber()>=pos)
                 book.replacePosition(book.getPositionNumber()+size);
             }
         }
-        SoundService.playMoveSound();
     }
 
     public Array<Book> insertBooks(Array<Book> selectedBooks) {

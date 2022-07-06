@@ -1,4 +1,4 @@
-package com.bytevalue.pause;
+package com.bytevalue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -7,29 +7,24 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.bytevalue.ActivitySwitcher;
-import com.bytevalue.service.TextureService;
 
-public class Pause extends Actor {
+public abstract class Button extends Actor {
 
-    private TextureRegion textureRegion;
     private Viewport viewport;
     private float pressureTime=0;
     private Rectangle rectangle;
-    private ActivitySwitcher activitySwitcher;
 
 
-    Pause(Viewport viewport, ActivitySwitcher activitySwitcher){
-        textureRegion= TextureService.getTextureByStr("");
+    public Button(Viewport viewport){
         this.viewport=viewport;
-        rectangle=new Rectangle(400,400,100,100);
-        this.activitySwitcher=activitySwitcher;
+        rectangle=getRectangle();
     }
 
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(textureRegion,400,400);
+        if (getTextureRegion()!=null)
+        batch.draw(getTextureRegion(),getRectX(),getRectY());
     }
 
     @Override
@@ -42,10 +37,20 @@ public class Pause extends Actor {
                 pressureTime=0;
             }
         }else {
-            if (pressureTime>0){
+            if (pressureTime>0&&pressureTime<1){
                 pressureTime=0;
-                activitySwitcher.switchActivity();
+                action();
             }
         }
+    }
+
+    public abstract void action();
+    public abstract TextureRegion getTextureRegion();
+    public abstract Rectangle getRectangle();
+    public float getRectX(){
+        return rectangle.getX();
+    }
+    public float getRectY(){
+        return rectangle.getY();
     }
 }

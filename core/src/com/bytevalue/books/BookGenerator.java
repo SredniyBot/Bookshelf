@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class BookGenerator {
-
     private int shiftId=0;
     private final int bookshelfCount=6;
     private final int numberOfSkins=19;

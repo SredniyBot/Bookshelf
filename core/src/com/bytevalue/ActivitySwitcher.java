@@ -1,5 +1,5 @@
 package com.bytevalue;
 
 public interface ActivitySwitcher {
-    void switchActivity();
+    void switchActivity(Activity activity);
 }

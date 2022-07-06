@@ -26,6 +26,7 @@ public class BookHandler extends Actor {
     }
 
     public void selectBook(Book book) {
+        VibrationService.vibrate(40);
         selectedBooks.clear();
         selectedBooks.add(book);
         selectedBooks.addAll(book.getGoodNeighbours());

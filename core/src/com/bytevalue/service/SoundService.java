@@ -12,7 +12,15 @@ public class SoundService {
 
     private static final Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/move.wav"));
     private static long lastMoveTime=0;
+
+    private static boolean snd;
+
+    static {
+        snd= Gdx.app.getPreferences("main").getBoolean("s",true);
+    }
+
     public static void playStandSound(){
+        if(snd)
         switch (new RandomXS128().nextInt(4)){
             case 0:
                 sound1.play();
@@ -31,9 +39,20 @@ public class SoundService {
     }
 
     public static void playMoveSound() {
+        if(snd)
         if(System.currentTimeMillis() -lastMoveTime>300){
             sound.play();
             lastMoveTime =System.currentTimeMillis();
         }
     }
+
+    public static void playMenuSound() {
+
+    }
+
+    public static void setSound(boolean s) {
+        snd= s;
+    }
+
+
 }

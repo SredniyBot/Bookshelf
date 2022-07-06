@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.pause.PauseStage;
+import com.bytevalue.settings.SettingsStage;
 
 
 public class MainScreen implements Screen, ActivitySwitcher{
@@ -16,15 +17,17 @@ public class MainScreen implements Screen, ActivitySwitcher{
     private final Viewport mViewport;
     private Stage mActiveStage;
 
-    private GameStage gameStage;
-    private PauseStage pauseStage;
-
+    private final GameStage gameStage;
+    private final PauseStage pauseStage;
+    private final SettingsStage settingsStage;
+    private boolean gamePreDraw=false;
 
     public MainScreen() {
         mCamera = new OrthographicCamera();
         mViewport = new FillViewport(BookSorter.SCREEN_WIDTH, BookSorter.SCREEN_HEIGHT, mCamera);
-        GameStage gameStage =new GameStage(mViewport,this);
-        PauseStage pauseStage =new PauseStage(mViewport);
+        gameStage =new GameStage(mViewport,this);
+        pauseStage =new PauseStage(mViewport,this);
+        settingsStage = new SettingsStage(mViewport,this);
         mActiveStage = gameStage;
     }
 
@@ -42,6 +45,8 @@ public class MainScreen implements Screen, ActivitySwitcher{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         mActiveStage.act(delta);
+        if(gamePreDraw)
+            gameStage.draw();
         mActiveStage.draw();
 
     }
@@ -73,7 +78,21 @@ public class MainScreen implements Screen, ActivitySwitcher{
     }
 
     @Override
-    public void switchActivity() {
-        mActiveStage=pauseStage;
+    public void switchActivity(Activity activity) {
+        switch (activity){
+            case GAME:
+                gamePreDraw=false;
+                mActiveStage=gameStage;
+                break;
+            case PAUSE:
+                gamePreDraw=true;
+                mActiveStage=pauseStage;
+                break;
+            case SETTINGS:
+                gamePreDraw=true;
+                mActiveStage=settingsStage;
+                break;
+        }
+
     }
 }

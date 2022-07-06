@@ -1,6 +1,5 @@
 package com.bytevalue.books;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -47,7 +46,6 @@ public class Book extends BookLocation implements Comparable<Book>{
     @Override
     public void onTouch() {
         if(!bookHandler.isBookPressured()) {
-            Gdx.input.vibrate(20);
             bookHandler.selectBook(this);
         }
     }
