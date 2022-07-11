@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.Activity;
 import com.bytevalue.ActivitySwitcher;
 import com.bytevalue.Button;
+import com.bytevalue.service.SoundService;
 
 public class MainMenuButton extends Button {
 
@@ -20,6 +21,7 @@ public class MainMenuButton extends Button {
 
     @Override
     public void action() {
+        SoundService.playMenuSound();
         activitySwitcher.switchActivity(Activity.MAIN_MENU);
     }
 

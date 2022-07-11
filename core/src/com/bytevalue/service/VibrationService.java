@@ -17,5 +17,8 @@ public class VibrationService {
         vibrate = b;
     }
 
+    public static void dispose(){
+
+    }
 
 }

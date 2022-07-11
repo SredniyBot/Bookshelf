@@ -12,10 +12,12 @@ public class AnimatedActor extends Actor {
     private TextureRegion currentFrame;
     private float stateTime;
     private boolean started;
+    private float maxTime;
 
     public AnimatedActor(float frameDuration, Array<TextureRegion> frames) {
         animation = new Animation<>(frameDuration, frames);
         currentFrame = animation.getKeyFrame(stateTime);
+        maxTime=frameDuration*frames.size;
         setBorders(frames.get(0));
     }
 
@@ -37,12 +39,13 @@ public class AnimatedActor extends Actor {
     public void act(float delta) {
         super.act(delta);
 
-        if (!started) {
-            return;
-        }
+//        if (!started) {
+//            return;
+//        }
 
         stateTime += delta;
         currentFrame = animation.getKeyFrame(stateTime);
+        if (stateTime>maxTime)stateTime=0;
     }
 
     @Override

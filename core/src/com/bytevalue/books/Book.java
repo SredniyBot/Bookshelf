@@ -16,6 +16,12 @@ public class Book extends BookLocation implements Comparable<Book>{
 
     private final Vector2 destination;
 
+    private boolean canBeLifted =true;
+
+    private boolean isDisappearing=false;
+    private int phaseOfDisappear = 0;
+
+
     Book(int id,int positionNumber,BookHandler bookHandler,BookContainer bookContainer){
         this.id=id;
         this.positionNumber=positionNumber;
@@ -23,12 +29,14 @@ public class Book extends BookLocation implements Comparable<Book>{
         destination=new Vector2(0,0);
         setBookContainerF(bookContainer);
         setZIndex(2);
-        region= TextureService.getBookTextureById(this.id);
+        region= TextureService.getBookTextureById(id);
         setSize(bookContainer.getBookWidth(),bookContainer.getBookHeight());
     }
 
     @Override
     public void act(float delta) {
+        if (isDisappearing)
+            animateDisappearing(delta);
         if (bookHandler.isShifting()){
             moveToHome(delta);
             return;
@@ -45,6 +53,7 @@ public class Book extends BookLocation implements Comparable<Book>{
 
     @Override
     public void onTouch() {
+        if(canBeLifted)
         if(!bookHandler.isBookPressured()) {
             bookHandler.selectBook(this);
         }
@@ -105,5 +114,30 @@ public class Book extends BookLocation implements Comparable<Book>{
         setPosition(c);
         startReturning();
     }
+
+
+
+    public void animateDisappearing(float f){
+        if (phaseOfDisappear ==0)
+            setScaleY(getScaleY()-f*4);
+        else if (phaseOfDisappear ==1){
+            setScaleY(getScaleY()+f*5);
+            setScaleX(getScaleX()-f*5);
+            setRealX(getRealX()+f*90);
+        } else if(phaseOfDisappear ==2){
+            setScaleY(0);
+            setScaleX(0);
+        }
+        if (getScaleY()<=0.3) phaseOfDisappear =1;
+        if (getScaleX()<=0) phaseOfDisappear =2;
+
+    }
+
+
+    public void disappear(){
+        isDisappearing=true;
+        canBeLifted=false;
+    }
+
 
 }

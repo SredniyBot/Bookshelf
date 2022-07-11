@@ -1,8 +1,10 @@
 package com.bytevalue;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 
-public class BookSorter extends Game {
+public class BookSorter extends Game implements Stoppable {
 
 	public static final float SCREEN_WIDTH = 1280f;
 	public static final float SCREEN_HEIGHT = 1280f;
@@ -13,6 +15,9 @@ public class BookSorter extends Game {
 
 	@Override
 	public void create () {
+		Gdx.input.setCatchKey(Input.Keys.BACK, true);
+		Gdx.gl.glEnable(Gdx.gl20.GL_BLEND);
+		Gdx.input.setInputProcessor(new MyInputProcessor(this));
 		mMainScreen = new MainScreen();
 		setScreen(mMainScreen);
 	}
@@ -27,8 +32,12 @@ public class BookSorter extends Game {
 	}
 
 	@Override
+	public void pause() {
+		super.pause();
+	}
+
+	@Override
 	public void dispose() {
 		super.dispose();
-		mMainScreen.dispose();
 	}
 }

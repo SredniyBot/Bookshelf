@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.pause.PauseStage;
+import com.bytevalue.service.SoundService;
+import com.bytevalue.service.TextureService;
 import com.bytevalue.settings.SettingsStage;
 
 
@@ -23,6 +25,8 @@ public class MainScreen implements Screen, ActivitySwitcher{
     private boolean gamePreDraw=false;
 
     public MainScreen() {
+        TextureService.init();
+        SoundService.init();
         mCamera = new OrthographicCamera();
         mViewport = new FillViewport(BookSorter.SCREEN_WIDTH, BookSorter.SCREEN_HEIGHT, mCamera);
         gameStage =new GameStage(mViewport,this);
@@ -34,7 +38,8 @@ public class MainScreen implements Screen, ActivitySwitcher{
 
     @Override
     public void show() {
-
+        TextureService.init();
+        SoundService.init();
     }
 
     @Override
@@ -59,7 +64,18 @@ public class MainScreen implements Screen, ActivitySwitcher{
 
     @Override
     public void pause() {
+        if (mActiveStage==gameStage){
+            gamePreDraw=true;
+            mActiveStage=pauseStage;
+        } else if (mActiveStage==pauseStage){
+            gamePreDraw=false;
+            mActiveStage=gameStage;
+        }else if(mActiveStage==settingsStage){
+            gamePreDraw=true;
+            mActiveStage=pauseStage;
+        }else {
 
+        }
     }
 
     @Override
@@ -74,7 +90,12 @@ public class MainScreen implements Screen, ActivitySwitcher{
 
     @Override
     public void dispose() {
+        gameStage.dispose();
+        pauseStage.dispose();
+        settingsStage.dispose();
         mActiveStage.dispose();
+        TextureService.dispose();
+        SoundService.dispose();
     }
 
     @Override

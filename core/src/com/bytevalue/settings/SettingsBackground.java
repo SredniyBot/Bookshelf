@@ -8,7 +8,6 @@ import com.bytevalue.service.TextureService;
 public class SettingsBackground extends Actor {
 
     private final TextureRegion textureRegion;
-    private TextureRegion back;
 
     public SettingsBackground() {
         textureRegion = TextureService.getSettingsTexture();
@@ -16,13 +15,8 @@ public class SettingsBackground extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (back!=null)
-        batch.draw(back,0,0);
         batch.draw(textureRegion,0,0);
     }
 
 
-    public void setBackground(TextureRegion background) {
-        back=background;
-    }
 }

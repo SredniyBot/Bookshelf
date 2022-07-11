@@ -5,54 +5,91 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.RandomXS128;
 
 public class SoundService {
-    private static final Sound sound1 = Gdx.audio.newSound(Gdx.files.internal("sound/stand1.wav"));
-    private static final Sound sound2 = Gdx.audio.newSound(Gdx.files.internal("sound/stand2.wav"));
-    private static final Sound sound3 = Gdx.audio.newSound(Gdx.files.internal("sound/stand3.wav"));
-    private static final Sound sound4 = Gdx.audio.newSound(Gdx.files.internal("sound/stand4.wav"));
+    private static Sound stand1;
+    private static Sound stand2;
+    private static Sound stand3;
+    private static Sound stand4;
 
-    private static final Sound sound = Gdx.audio.newSound(Gdx.files.internal("sound/move.wav"));
+
+    private static Sound menu1;
+    private static Sound menu2;
+    private static Sound menu3;
+
+    private static Sound move;
     private static long lastMoveTime=0;
 
     private static boolean snd;
 
-    static {
+    public static void init(){
         snd= Gdx.app.getPreferences("main").getBoolean("s",true);
+        stand1 = Gdx.audio.newSound(Gdx.files.internal("sound/stand1.wav"));
+        stand2 = Gdx.audio.newSound(Gdx.files.internal("sound/stand2.wav"));
+        stand3 = Gdx.audio.newSound(Gdx.files.internal("sound/stand3.wav"));
+        stand4 = Gdx.audio.newSound(Gdx.files.internal("sound/stand4.wav"));
+        menu1 = Gdx.audio.newSound(Gdx.files.internal("sound/menu4.wav"));
+        menu2 = Gdx.audio.newSound(Gdx.files.internal("sound/menu2.wav"));
+        menu3 = Gdx.audio.newSound(Gdx.files.internal("sound/menu3.wav"));
+        move = Gdx.audio.newSound(Gdx.files.internal("sound/move.wav"));
     }
+
 
     public static void playStandSound(){
         if(snd)
         switch (new RandomXS128().nextInt(4)){
             case 0:
-                sound1.play();
+                stand1.play();
                 break;
             case 1:
-                sound2.play();
+                stand2.play();
                 break;
             case 2:
-                sound3.play();
+                stand3.play();
                 break;
             case 3:
-                sound4.play();
+                stand4.play();
 
                 break;
         }
+    }
+
+
+    public static void playMenuSound(){
+
+        if(snd)
+            menu1.play();
+//            switch (new RandomXS128().nextInt(3)){
+//                case 0:
+//
+//                    break;
+//                case 1:
+//                    menu2.play();
+//                    break;
+//                case 2:
+//                    menu3.play();
+//                    break;
+//            }
     }
 
     public static void playMoveSound() {
         if(snd)
         if(System.currentTimeMillis() -lastMoveTime>300){
-            sound.play();
+            move.play();
             lastMoveTime =System.currentTimeMillis();
         }
     }
 
-    public static void playMenuSound() {
 
-    }
 
     public static void setSound(boolean s) {
         snd= s;
     }
 
 
+    public static void dispose(){
+        stand1.dispose();
+        stand2.dispose();
+        stand3.dispose();
+        stand4.dispose();
+        move.dispose();
+    }
 }

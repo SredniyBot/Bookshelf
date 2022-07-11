@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.Activity;
 import com.bytevalue.ActivitySwitcher;
 import com.bytevalue.Button;
+import com.bytevalue.service.SoundService;
 import com.bytevalue.service.TextureService;
 
 public class PauseButton extends Button {
@@ -18,12 +19,14 @@ public class PauseButton extends Button {
     public PauseButton(Viewport viewport, ActivitySwitcher activitySwitcher){
         super(viewport);
         this.activitySwitcher=activitySwitcher;
+
     }
 
 
     @Override
     public void action() {
         activitySwitcher.switchActivity(Activity.PAUSE);
+        SoundService.playMenuSound();
     }
 
     @Override

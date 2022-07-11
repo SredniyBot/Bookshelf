@@ -28,7 +28,7 @@ public class VibrationButton extends Button {
         Preferences prefs = Gdx.app.getPreferences("main");
         prefs.putBoolean("v",vibrates);
         VibrationService.setVibrate(vibrates);
-        VibrationService.vibrate(120);
+        VibrationService.vibrate(200);
         prefs.flush();
     }
 

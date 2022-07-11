@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.Activity;
 import com.bytevalue.ActivitySwitcher;
 import com.bytevalue.Button;
+import com.bytevalue.service.SoundService;
 
 public class SettingsButton extends Button {
 
@@ -19,6 +20,7 @@ public class SettingsButton extends Button {
     @Override
     public void action() {
         activitySwitcher.switchActivity(Activity.SETTINGS);
+        SoundService.playMenuSound();
     }
 
     @Override
@@ -30,4 +32,5 @@ public class SettingsButton extends Button {
     public Rectangle getRectangle() {
         return new Rectangle(483,718,312,77);
     }
+
 }

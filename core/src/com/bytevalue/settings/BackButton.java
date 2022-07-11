@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.Activity;
 import com.bytevalue.ActivitySwitcher;
 import com.bytevalue.Button;
+import com.bytevalue.service.SoundService;
 
 public class BackButton extends Button {
 
@@ -19,7 +20,9 @@ public class BackButton extends Button {
 
     @Override
     public void action() {
-        activitySwitcher.switchActivity(Activity.GAME);
+        activitySwitcher.switchActivity(Activity.PAUSE);
+        SoundService.playMenuSound();
+
     }
 
     @Override

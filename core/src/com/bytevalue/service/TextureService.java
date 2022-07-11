@@ -3,32 +3,32 @@ package com.bytevalue.service;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 public class TextureService { //TODO
 
-    public static List<TextureRegion> booksTextureRegions;
+    public static Array<TextureRegion> booksTextureRegions;
 
     public static Texture bookshelfTexture;
     public static Texture prefLogoTexture;
     public static Texture pauseMenuTexture;
     public static Texture settingsTexture;
-    public static int w=35,h=160;
+    public static Texture booksTexture;
+    public static int w=35,h=160,count=18;
 
-    static {
-        Texture booksTexture =new Texture(Gdx.files.internal("books/books13.0.png"));
-        booksTextureRegions=booksTextureRegionsInit(booksTexture,w,h,5,35,17);
+    public static void init(){
+        booksTexture =new Texture(Gdx.files.internal("books/books13.0.png"));
+        booksTextureRegions=booksTextureRegionsInit(booksTexture,w,h,5,35,count);
         prefLogoTexture = new Texture(Gdx.files.internal("prefs.png"));
-        bookshelfTexture =new Texture(Gdx.files.internal("shelf4.png"));
+        bookshelfTexture =new Texture(Gdx.files.internal("shelf3.png"));
         pauseMenuTexture=new Texture(Gdx.files.internal("pause.png"));
         settingsTexture=new Texture(Gdx.files.internal("settings.png"));
     }
 
-    private static List<TextureRegion> booksTextureRegionsInit(Texture booksTexture,
+
+    private static Array<TextureRegion> booksTextureRegionsInit(Texture booksTexture,
             int w,int h,int paddingTop,int paddingLeft,int count){
-        List<TextureRegion> textures = new ArrayList<>();
+        Array<TextureRegion> textures = new Array<>();
         for (int i=0;i<count;i++){
             textures.add(new TextureRegion(booksTexture,paddingLeft*i,paddingTop,w,h));
         }
@@ -37,11 +37,16 @@ public class TextureService { //TODO
 
 
     public static TextureRegion getBookTextureById(int id){
-        id=id%34;                                                                                   //TODO
+        id=id%count;                                                                                   //TODO
         return booksTextureRegions.get(id);
     }
 
-    public static TextureRegion getPauseTexture(){
+    public static Array<TextureRegion> getBookTextures(){
+        return booksTextureRegions;
+    }
+
+
+        public static TextureRegion getPauseTexture(){
         return new TextureRegion(prefLogoTexture,390,16,32,44);
     }
 
@@ -50,7 +55,7 @@ public class TextureService { //TODO
     }
 
     public static TextureRegion getSettingsTexture(){
-        return new TextureRegion(settingsTexture,0,0,1280,1200);
+        return new TextureRegion(settingsTexture,0,0,1280,1201);
     }
 
     public static TextureRegion getVibrateTexture(boolean vibrate){
@@ -73,5 +78,13 @@ public class TextureService { //TODO
 
     public static TextureRegion getTopTexture(){
         return new TextureRegion(new Texture(Gdx.files.internal("top.png")),0,0,1280,80);
+    }
+
+    public static void dispose() {
+        bookshelfTexture.dispose();
+        prefLogoTexture.dispose();
+        pauseMenuTexture.dispose();
+        settingsTexture.dispose();
+        booksTexture.dispose();
     }
 }

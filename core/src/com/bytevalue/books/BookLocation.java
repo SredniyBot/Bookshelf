@@ -128,6 +128,11 @@ public abstract class BookLocation extends Actor {
         this.bookContainer = bookContainer;
 
     }
+
+    public void setRealX(float x){
+        rectangle.x=x;
+    }
+
     public abstract void isPressed(Vector2 touch);
     public abstract void onRelease();
     public abstract void onTouch();
