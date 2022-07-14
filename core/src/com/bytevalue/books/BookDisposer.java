@@ -72,4 +72,8 @@ public class BookDisposer {
     public void roundBias() {
         bias=Math.round(bias);
     }
+
+    public void toZero() {
+        bias=0;
+    }
 }

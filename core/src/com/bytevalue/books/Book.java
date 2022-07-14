@@ -1,7 +1,6 @@
 package com.bytevalue.books;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bytevalue.service.TextureService;
@@ -9,7 +8,6 @@ import com.bytevalue.service.TextureService;
 public class Book extends BookLocation implements Comparable<Book>{
 
     private final int id;
-    private final TextureRegion region;
     private final BookHandler bookHandler;
     private int positionNumber;
     private boolean selected;
@@ -28,8 +26,7 @@ public class Book extends BookLocation implements Comparable<Book>{
         this.bookHandler = bookHandler;
         destination=new Vector2(0,0);
         setBookContainerF(bookContainer);
-        setZIndex(2);
-        region= TextureService.getBookTextureById(id);
+        setZIndex(100);
         setSize(bookContainer.getBookWidth(),bookContainer.getBookHeight());
     }
 
@@ -75,7 +72,8 @@ public class Book extends BookLocation implements Comparable<Book>{
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(region, getRealX(), getRealY(), getOriginX(), getOriginY(),
+        batch.draw(TextureService.getBookTextureById(id), getRealX(), getRealY(),
+                getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
     }
 
@@ -139,5 +137,7 @@ public class Book extends BookLocation implements Comparable<Book>{
         canBeLifted=false;
     }
 
-
+    public void setCanBeLifted(boolean canBeLifted) {
+        this.canBeLifted = canBeLifted;
+    }
 }

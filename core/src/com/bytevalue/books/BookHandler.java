@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.VibrationService;
 
@@ -15,9 +16,12 @@ public class BookHandler extends Actor {
     private Bookshelf currentBookshelf;
     private boolean bookPressured =false;
 
+    private boolean isWaiting=false;
+    private Viewport viewport;
     private Locket locket;
 
-    public BookHandler(){
+    public BookHandler(Viewport viewport){
+        this.viewport=viewport;
         selectedBooks=new Array<>();
     }
 
@@ -41,9 +45,9 @@ public class BookHandler extends Actor {
 
     @Override
     public void act(float delta) {
+        if (!isWaiting)
         if (Gdx.input.isTouched()){
-            Vector2 touch = locket.getBookDisposer().getViewport()
-                    .unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+            Vector2 touch = viewport.unproject(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
             if(bookPressured) {
                 boolean intersects=false;
                 for (Bookshelf bookshelf : locket.getBookshelves()) {
@@ -92,5 +96,8 @@ public class BookHandler extends Actor {
         return locket.isShifting();
     }
 
+    public void setWaiting(boolean waiting) {
+        isWaiting = waiting;
+    }
 }
 

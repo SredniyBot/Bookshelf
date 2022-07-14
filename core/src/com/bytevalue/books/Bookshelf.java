@@ -45,6 +45,7 @@ public class Bookshelf implements BookContainer {
         int i=0;
         for (int num:input){
             Book book=new Book(num,i,bookHandler,this);
+            book.setZIndex(1);
             book.setViewport(bookDisposer.getViewport());
             book.setVisible(true);
             books.add(book);

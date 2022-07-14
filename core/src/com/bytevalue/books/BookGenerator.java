@@ -141,5 +141,8 @@ public class BookGenerator {
         return 49+new Random().nextInt(11);
     }
 
+    public void toZero(){
+        shiftId=0;
+    }
 
 }

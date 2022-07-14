@@ -1,42 +1,47 @@
 package com.bytevalue.books;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bytevalue.inter.Activity;
+import com.bytevalue.inter.ActivitySwitcher;
 
 import java.util.Comparator;
 import java.util.HashMap;
 
-public class Locket extends Actor {
+public class Locket extends Group {
 
     private final Array<Bookshelf> bookshelves;
 
-    Background background;
+    private final Background background;
+    private Score score;
 
     private float bias;
     private boolean shifting =false;
 
-    private final ActorAdder actorAdder;            //adds new books to stage
     private final BookGenerator bookGenerator;      //creates new books, balances game
     private final BookDisposer bookDisposer;        //constants of book positions
     private final BookHandler bookHandler;          //handle books while they are taken
 
+    private ActivitySwitcher activitySwitcher;
+    private boolean startMenu=true;
     private int numberOfShelves=6;
-    public Locket(Viewport viewport, ActorAdder actorAdder, BookHandler bookHandler){
-        this.actorAdder = actorAdder;
+
+    public Locket(Viewport viewport, BookHandler bookHandler, Score score, ActivitySwitcher activitySwitcher){
         this.bookHandler=bookHandler;
+        this.activitySwitcher=activitySwitcher;
+        this.score=score;
         bookHandler.setBookshelfCollection(this);
         bookGenerator =new BookGenerator();
         bookshelves=new Array<>();
         bookDisposer = new BookDisposer(viewport);
         background = new Background(bookDisposer);
+        background.setModeStartMenu(startMenu);
+        addActor(background);
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        background.draw(batch);
-    }
+
+
 
     @Override
     public void act(float delta) {
@@ -51,13 +56,16 @@ public class Locket extends Actor {
                 bookDisposer.roundBias();
                 bias=0;
                 shifting=false;
+                if (startMenu){
+                    deactivateStartMenu();
+                }
             }
             for (Bookshelf bookshelf:bookshelves) {
                 bookshelf.resetPositions();
                 if (bookshelf.getY() + bookDisposer.getBookH() < 0) deleteBookshelf(bookshelf);
             }
-
         }
+        super.act(delta);
     }
 
     private void deleteBookshelf(Bookshelf bookshelf) {
@@ -67,6 +75,15 @@ public class Locket extends Actor {
 
 
 
+    public void complete(){
+        bookshelves.sort(new Comparator<Bookshelf>() {
+            @Override
+            public int compare(Bookshelf b1, Bookshelf b2) {
+                return Integer.compare((int) b1.getY(),(int) b2.getY());
+            }
+        });
+        complete(bookshelves.get(bookshelves.size-1));
+    }
 
     public void complete(Bookshelf bookshelf){
         bookshelves.sort(new Comparator<Bookshelf>() {
@@ -88,19 +105,19 @@ public class Locket extends Actor {
         }
 
         Array<Array<Integer>> books = bookGenerator.generate(map,s+1);
-
+        score.increaseScore(s+1);
         float y=bookshelf.getY();
         for (int i=0;i<=s;i++){
             Bookshelf newBookshelf=new Bookshelf(numberOfShelves++,bookDisposer,bookHandler,books.get(i));
             bookshelves.add(newBookshelf);
-            for (Book book:newBookshelf.getBooks()) actorAdder.addActor(book);
+            for (Book book:newBookshelf.getBooks()) addActor(book);
         }
         startBias(y);
     }
 
     private void startBias(float y){
         shifting=true;
-        bias=y+200-10;//TODO rewrite
+        bias=y+200-10;
     }
 
 
@@ -109,10 +126,30 @@ public class Locket extends Actor {
         for (int i=0;i<6;i++){
             Bookshelf bookshelf=new Bookshelf(i,bookDisposer,bookHandler,newBooks.get(i));
             bookshelves.add(bookshelf);
-            for (Book book:bookshelf.getBooks())actorAdder.addActor(book);
+            for (Book book:bookshelf.getBooks())    addActor(book);
         }
     }
 
+    public void generateStartBookshelves(){
+        Array<Integer> newBooks1 = new Array<>();
+        Array<Integer> newBooks2 = new Array<>();
+        for (int i=0;i<11;i++)newBooks1.add(0);
+        newBooks2.add(1);
+        newBooks2.add(0);
+        Bookshelf bookshelf=new Bookshelf(5,bookDisposer,bookHandler,newBooks1);
+        Bookshelf bookshelf2=new Bookshelf(0,bookDisposer,bookHandler,newBooks2);
+        bookshelves.add(bookshelf);
+        bookshelves.add(bookshelf2);
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
+        for (Book book:bookshelf.getBooks()) {
+            addActor(book);
+            book.setCanBeLifted(false);
+        }
+        for (Book book:bookshelf2.getBooks()) addActor(book);
+    }
 
 
 
@@ -125,7 +162,34 @@ public class Locket extends Actor {
     }
 
 
+
     public BookDisposer getBookDisposer() {
         return bookDisposer;
+    }
+
+
+    public void setModeStart() {
+        bookHandler.setWaiting(true);
+        for (int i=bookshelves.size-1;i>=0;i--)deleteBookshelf(bookshelves.get(i));
+        startMenu=true;
+        background.setModeStartMenu(true);
+        numberOfShelves=6;
+        score.toZero();
+        bookDisposer.toZero();
+        bookGenerator.toZero();
+        bias=0;
+        shifting=false;
+        generateStartBookshelves();
+        bookHandler.setWaiting(false);
+    }
+
+    public void deactivateStartMenu(){
+        startMenu=false;
+        background.setModeStartMenu(false);
+        activitySwitcher.switchActivity(Activity.GAME);
+    }
+
+    public boolean isStartMenu() {
+        return startMenu;
     }
 }

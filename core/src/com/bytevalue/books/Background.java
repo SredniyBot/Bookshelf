@@ -1,29 +1,37 @@
 package com.bytevalue.books;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.bytevalue.BookSorter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.bytevalue.service.TextureService;
 
-public class Background  {
+public class Background extends Actor{
 
-    private final TextureRegion backgroundTexture;
-    private final TextureRegion topTexture;
     private final BookDisposer bookDisposer;
+    private boolean startMenu;
 
     Background(BookDisposer bookDisposer){
         this.bookDisposer = bookDisposer;
-        backgroundTexture = TextureService.getBackgroundTexture();
-        topTexture= TextureService.getTopTexture();
+        setZIndex(1000000);
     }
 
-    public void draw(Batch batch) {
-        batch.draw(backgroundTexture,0,bookDisposer.getBias()%getH());
-        batch.draw(backgroundTexture,0,bookDisposer.getBias()%getH()+ backgroundTexture.getRegionHeight());
-        batch.draw(topTexture,0, BookSorter.SCREEN_HEIGHT-topTexture.getRegionHeight());
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        if (startMenu){
+            batch.draw(TextureService.getStartMenuTexture(), 0, bookDisposer.getBias());
+        }else {
+            batch.draw(TextureService.getBackgroundTexture(), 0, bookDisposer.getBias() % getH());
+        }
+        batch.draw(TextureService.getBackgroundTexture(), 0, bookDisposer.getBias() % getH() +
+                TextureService.getBackgroundTexture().getRegionHeight());
     }
+
     public int getH(){
-        return backgroundTexture.getRegionHeight();
+        return TextureService.getBackgroundTexture().getRegionHeight();
     }
 
+
+    public void setModeStartMenu(boolean startMenu) {
+        this.startMenu=startMenu;
+    }
 }

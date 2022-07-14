@@ -22,14 +22,14 @@ public class SoundService {
 
     public static void init(){
         snd= Gdx.app.getPreferences("main").getBoolean("s",true);
-        stand1 = Gdx.audio.newSound(Gdx.files.internal("sound/stand1.wav"));
-        stand2 = Gdx.audio.newSound(Gdx.files.internal("sound/stand2.wav"));
-        stand3 = Gdx.audio.newSound(Gdx.files.internal("sound/stand3.wav"));
-        stand4 = Gdx.audio.newSound(Gdx.files.internal("sound/stand4.wav"));
-        menu1 = Gdx.audio.newSound(Gdx.files.internal("sound/menu4.wav"));
-        menu2 = Gdx.audio.newSound(Gdx.files.internal("sound/menu2.wav"));
-        menu3 = Gdx.audio.newSound(Gdx.files.internal("sound/menu3.wav"));
-        move = Gdx.audio.newSound(Gdx.files.internal("sound/move.wav"));
+        stand1 = Gdx.audio.newSound(Gdx.files.internal("sounds/stand/stand1.wav"));
+        stand2 = Gdx.audio.newSound(Gdx.files.internal("sounds/stand/stand2.wav"));
+        stand3 = Gdx.audio.newSound(Gdx.files.internal("sounds/stand/stand3.wav"));
+        stand4 = Gdx.audio.newSound(Gdx.files.internal("sounds/stand/stand4.wav"));
+        menu1 = Gdx.audio.newSound(Gdx.files.internal("sounds/menu/menu4.wav"));
+        menu2 = Gdx.audio.newSound(Gdx.files.internal("sounds/menu/menu2.wav"));
+        menu3 = Gdx.audio.newSound(Gdx.files.internal("sounds/menu/menu3.wav"));
+        move = Gdx.audio.newSound(Gdx.files.internal("sounds/move/move.wav"));
     }
 
 
