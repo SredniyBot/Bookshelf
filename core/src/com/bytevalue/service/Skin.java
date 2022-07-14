@@ -2,20 +2,20 @@ package com.bytevalue.service;
 
 public enum Skin {
 
-    USUAL(18,"usual","1","#c0a588",0),
+    USUAL(18,"usual","#c0a588",0),
 
-    HALLOWEEN(6,"halloween","1","#c0a588",1),
+    HALLOWEEN(6,"halloween","#a89dcf",1),
 
-    NEON(6,"neon","1","#c0a588",2);
+    NEON(6,"neon","#c0a588",2);
 
     private final int bookCount,number;
-    private final String  folder,soundIndex, fontColor;
+    private final String  folder, fontColor;
 
-    Skin(int bookCount,String folder, String soundIndex,String fontColor,int number){
+    Skin(int bookCount,String folder,String fontColor,int number){
         this.number=number;
         this.folder=folder;
         this.bookCount = bookCount;
-        this.soundIndex=soundIndex;
+
         this.fontColor=fontColor;
     }
 
@@ -50,10 +50,6 @@ public enum Skin {
         return "themes/"+folder+"/shelf.png";
     }
 
-    public String getSoundIndex() {
-        return soundIndex;
-    }
-
     public String getFontColor() {
         return fontColor;
     }
@@ -83,4 +79,40 @@ public enum Skin {
         else
             return "themes/"+folder+"/skinsEN.png";
     }
+
+    public String getQuitMenuFile(boolean ru) {
+        if (ru)
+            return "themes/"+folder+"/quitRU.png";
+        else
+            return "themes/"+folder+"/quitEN.png";
+    }
+
+    public String getLossMenuFile(boolean ru) {
+        if (ru)
+            return "themes/"+folder+"/lossRU.png";
+        else
+            return "themes/"+folder+"/lossEN.png";
+    }
+
+
+    public String getStand1Sound(){
+        return "sounds/"+folder+"/stand1.wav";
+    }
+    public String getStand2Sound(){
+        return "sounds/"+folder+"/stand2.wav";
+    }
+    public String getStand3Sound(){
+        return "sounds/"+folder+"/stand3.wav";
+    }
+    public String getMoveSound(){
+        return "sounds/"+folder+"/move.wav";
+    }
+    public String getShelfSound(){
+        return "sounds/"+folder+"/shelf.wav";
+    }
+    public String getMenuSound(){
+        return "sounds/"+folder+"/menu.wav";
+    }
+
+
 }

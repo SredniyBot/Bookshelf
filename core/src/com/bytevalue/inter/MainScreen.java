@@ -24,6 +24,10 @@ public class MainScreen implements Screen, ActivitySwitcher {
     private final SettingsStage settingsStage;
     private final StartStage startStage;
     private final SkinStage skinStage;
+    private final QuiteStage quitStage;
+    private final LossStage lossStage;
+
+
     private boolean gamePreDraw;
     private boolean gamePreUpdate;
 
@@ -36,6 +40,8 @@ public class MainScreen implements Screen, ActivitySwitcher {
         settingsStage = new SettingsStage(mViewport,this);
         startStage=new StartStage(mViewport,this);
         skinStage=new SkinStage(mViewport,this);
+        quitStage=new QuiteStage(mViewport,this);
+        lossStage=new LossStage(mViewport,this);
         mActiveStage = startStage;
         gamePreDraw=true;
         gamePreUpdate=true;
@@ -76,9 +82,14 @@ public class MainScreen implements Screen, ActivitySwitcher {
         gamePreUpdate=false;
         gamePreDraw=false;
         if(gameStage.isInStartPosition()){
-            gamePreUpdate=true;
-            gamePreDraw=true;
-            mActiveStage=startStage;
+            if (mActiveStage==startStage){
+                mActiveStage=quitStage;
+                gamePreDraw=true;
+            }else {
+                gamePreUpdate=true;
+                gamePreDraw=true;
+                mActiveStage=startStage;
+            }
         }else {
             if (mActiveStage==gameStage){
                 gamePreDraw=true;
@@ -102,21 +113,13 @@ public class MainScreen implements Screen, ActivitySwitcher {
 
     }
 
-    @Override
-    public void dispose() {
-        gameStage.dispose();
-        pauseStage.dispose();
-        settingsStage.dispose();
-        mActiveStage.dispose();
-        startStage.dispose();
-        TextureService.dispose();
-        SoundService.dispose();
-    }
+
 
     @Override
     public void switchActivity(Activity activity) {
         gamePreDraw=false;
         gamePreUpdate=false;
+
         switch (activity){
             case GAME:
                 mActiveStage=gameStage;
@@ -144,6 +147,10 @@ public class MainScreen implements Screen, ActivitySwitcher {
             case THEMES:
                 mActiveStage=skinStage;
                 break;
+            case LOST:
+                lossStage.setScore(gameStage.getScore());
+                mActiveStage=lossStage;
+                break;
         }
 
     }
@@ -154,5 +161,18 @@ public class MainScreen implements Screen, ActivitySwitcher {
         gamePreUpdate=false;
         gameStage.startGame();
         mActiveStage=gameStage;
+    }
+
+    @Override
+    public void dispose() {
+        gameStage.dispose();
+        pauseStage.dispose();
+        settingsStage.dispose();
+        mActiveStage.dispose();
+        startStage.dispose();
+        skinStage.dispose();
+        quitStage.dispose();
+        TextureService.dispose();
+        SoundService.dispose();
     }
 }

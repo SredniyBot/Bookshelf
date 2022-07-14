@@ -10,6 +10,7 @@ import com.bytevalue.service.Skin;
 import com.bytevalue.service.SkinService;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.TextureService;
+import com.bytevalue.service.VibrationService;
 
 public class SkinStage extends Stage {
 
@@ -22,6 +23,7 @@ public class SkinStage extends Stage {
             public void action() {
                 SkinService.setSkin(Skin.NEON);
                 SoundService.playMenuSound();                       //TODO
+                VibrationService.vibrate(20);
             }
 
             @Override
@@ -39,6 +41,7 @@ public class SkinStage extends Stage {
             public void action() {
                 SkinService.setSkin(Skin.HALLOWEEN);
                 SoundService.playMenuSound();                       //TODO
+                VibrationService.vibrate(20);
             }
 
             @Override
@@ -54,7 +57,8 @@ public class SkinStage extends Stage {
         Button usual = new Button(viewport){
             @Override
             public void action() {
-                SkinService.setSkin(Skin.NEON);
+                SkinService.setSkin(Skin.USUAL);
+                VibrationService.vibrate(20);
                 SoundService.playMenuSound();                       //TODO
             }
 
@@ -68,6 +72,24 @@ public class SkinStage extends Stage {
                 return new Rectangle(443,587,187,179);
             }
         };
+        Button back = new Button(viewport){
+            @Override
+            public void action() {
+                activitySwitcher.switchActivity(Activity.MAIN_MENU);
+                SoundService.playMenuSound();                       //TODO
+                VibrationService.vibrate(20);
+            }
+
+            @Override
+            public TextureRegion getTextureRegion() {
+                return null;
+            }
+
+            @Override
+            public Rectangle getRectangle() {
+                return new Rectangle(479,36,313,77);
+            }
+        };
 
         Actor background = new Actor(){
             @Override
@@ -79,6 +101,7 @@ public class SkinStage extends Stage {
         addActor(neon);
         addActor(halloween);
         addActor(usual);
+        addActor(back);
 
 
     }

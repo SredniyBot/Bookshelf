@@ -36,4 +36,8 @@ public class GameStage extends Stage implements ActorAdder,Pauser {
     public boolean isInStartPosition(){
         return locket.isStartMenu();
     }
+
+    public int getScore() {
+        return locket.getScore();
+    }
 }

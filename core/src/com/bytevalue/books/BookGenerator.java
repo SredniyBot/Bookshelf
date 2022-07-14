@@ -138,8 +138,8 @@ public class BookGenerator {
     }
 
     private int getNumberOfBooksToCreateFromZero(){
-        return 49+new Random().nextInt(11);
-    }
+        return 35+new Random().nextInt(11);
+    }//49
 
     public void toZero(){
         shiftId=0;

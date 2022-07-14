@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.inter.Activity;
 import com.bytevalue.inter.ActivitySwitcher;
+import com.bytevalue.service.SoundService;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -118,6 +119,7 @@ public class Locket extends Group {
     private void startBias(float y){
         shifting=true;
         bias=y+200-10;
+        SoundService.playShelfMoveSound();
     }
 
 
@@ -191,5 +193,9 @@ public class Locket extends Group {
 
     public boolean isStartMenu() {
         return startMenu;
+    }
+
+    public int getScore() {
+        return score.getScore();
     }
 }

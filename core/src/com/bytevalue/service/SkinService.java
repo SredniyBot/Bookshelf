@@ -12,7 +12,8 @@ public class SkinService {
         Preferences preferences = Gdx.app.getPreferences("main");
         currentSkin = Skin.getSkinById(preferences.getInteger("skin",0));
         TextureService.init(currentSkin);
-        SoundService.init();
+        SoundService.init(currentSkin);
+        FontService.init(currentSkin.getFontColor());
     }
 
 
@@ -22,7 +23,7 @@ public class SkinService {
         preferences.putInteger("skin",skin.getNumber());
         preferences.flush();
         TextureService.init(currentSkin);
-        SoundService.init();
+        SoundService.init(currentSkin);
     }
 
     public static Skin getCurrentSkin() {

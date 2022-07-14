@@ -21,6 +21,8 @@ public class TextureService { //TODO
     public static Texture booksTexture;
     public static Texture startTexture;
     public static Texture skinsTexture;
+    public static Texture quitMenuTexture;
+    public static Texture lossTexture;
 
     private static boolean ru;
 
@@ -40,6 +42,8 @@ public class TextureService { //TODO
         settingsTexture=new Texture(Gdx.files.internal(skin.getSettingsMenuFile(ru)));
         startTexture=new Texture(Gdx.files.internal(skin.getStartFile(ru)));
         skinsTexture=new Texture(Gdx.files.internal(skin.getSkinFile(ru)));
+        quitMenuTexture=new Texture(Gdx.files.internal(skin.getQuitMenuFile(ru)));
+        lossTexture =new Texture(Gdx.files.internal(skin.getLossMenuFile(ru)));
 
         booksTextureRegions=booksTextureRegionsInit(booksTexture,w,h,count);
         textureRegionMap=fillTextureRegionMap();
@@ -58,6 +62,8 @@ public class TextureService { //TODO
         res.put("background",new TextureRegion(bookshelfTexture,0,80,1280,1200));
         res.put("startMenu",new TextureRegion(startTexture,0,80,1280,1200));
         res.put("skins",new TextureRegion(skinsTexture,0,0,1280,1280));
+        res.put("quit",new TextureRegion(quitMenuTexture,0,0,1280,1280));
+        res.put("loss",new TextureRegion(lossTexture,0,0,1280,1200));
         res.put("top",new TextureRegion(bookshelfTexture,0,0,1280,80));
 
         return res;
@@ -73,6 +79,8 @@ public class TextureService { //TODO
         settingsTexture=new Texture(Gdx.files.internal(s.getSettingsMenuFile(ru)));
         startTexture=new Texture(Gdx.files.internal(s.getStartFile(ru)));
         skinsTexture=new Texture(Gdx.files.internal(s.getSkinFile(ru)));
+        quitMenuTexture=new Texture(Gdx.files.internal(s.getQuitMenuFile(ru)));
+        lossTexture =new Texture(Gdx.files.internal(s.getLossMenuFile(ru)));
         textureRegionMap=fillTextureRegionMap();
     }
 
@@ -136,22 +144,35 @@ public class TextureService { //TODO
         return textureRegionMap.get("startMenu");
     }
 
+    public static TextureRegion getQuitMenuTexture() {
+        return textureRegionMap.get("quit");
+    }
+
+    public static TextureRegion getLossTexture() {
+        return textureRegionMap.get("loss");
+    }
+
     public static void dispose() {
         if (booksTexture!=null)
-        bookshelfTexture.dispose();
+            bookshelfTexture.dispose();
         if (prefLogoTexture!=null)
-        prefLogoTexture.dispose();
+            prefLogoTexture.dispose();
         if (pauseMenuTexture!=null)
-        pauseMenuTexture.dispose();
+            pauseMenuTexture.dispose();
         if (settingsTexture!=null)
-        settingsTexture.dispose();
+            settingsTexture.dispose();
         if (booksTexture!=null)
-        booksTexture.dispose();
+            booksTexture.dispose();
         if (startTexture!=null)
             startTexture.dispose();
         if (skinsTexture!=null)
             skinsTexture.dispose();
+        if (quitMenuTexture!=null)
+            quitMenuTexture.dispose();
+        if (lossTexture !=null)
+            lossTexture.dispose();
     }
+
 
 
 }
