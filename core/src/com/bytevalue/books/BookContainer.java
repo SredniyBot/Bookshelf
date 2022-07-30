@@ -9,10 +9,16 @@ public interface BookContainer {
     Vector2 getStartPosition(int positionNumber);
 
     Array<Book> getSimilarNeighbours(Book book);
+    Array<Book> getTwoNeighbours(Book book);
+
 
 
     void collectBooks();
     void returnBooks(Array<Book> books);
     int getBookWidth();
     int getBookHeight();
+
+    void commitRemove(Book book);
+
+    void changeBookType(Book book);
 }

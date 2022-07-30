@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.bytevalue.notes.NotesCollection;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.TextureService;
 import com.bytevalue.service.VibrationService;
@@ -80,12 +81,18 @@ public class LanguageButton extends Group {
 
     private void changeLanguage(boolean ru){
         if (ru==this.ru)return;
-        if (!ru) bias=x-685;
-        else bias=x-560;
         this.ru=ru;
         TextureService.changeLanguage(ru);
+        NotesCollection.changeLanguage(ru);
         SoundService.playMenuSound();
         VibrationService.vibrate(20);
+        Preferences preferences=Gdx.app.getPreferences("main");
+        preferences.putBoolean("ru",ru);
+        preferences.flush();
+        if (!ru) bias=685-x;
+        else bias=560-x;
+        bias=-bias;
+
     }
 
 

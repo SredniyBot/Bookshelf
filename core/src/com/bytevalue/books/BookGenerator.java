@@ -12,6 +12,13 @@ public class BookGenerator {
     private int shiftId=0;
     private final int shelfCapacity=12;
 
+    private final Score score;
+
+    public BookGenerator(Score score) {
+        this.score=score;
+    }
+
+
     public Array<Array<Integer>> generateNew(int numberOfBookshelf){
         HashMap<Integer,Integer> n =new HashMap<>();
         for (int i=0;i<numberOfBookshelf;i++)n.put(i,0);
@@ -138,9 +145,12 @@ public class BookGenerator {
     }
 
     private int getNumberOfBooksToCreateFromZero(){
-        return 35+new Random().nextInt(11);
-    }//49
+        return getMinBooks()+new Random().nextInt(11);
+    }
 
+    private int getMinBooks(){
+        return 30+Math.min(Math.round(score.getScore()*0.06f),20);
+    }
     public void toZero(){
         shiftId=0;
     }

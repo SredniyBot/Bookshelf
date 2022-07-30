@@ -1,0 +1,321 @@
+{number='1'
+note='Но глаза слепы. Вы должны видеть сердцем.'
+noteEN='But eyes are blind. You have to look with the heart.'
+name='Маленький принц'
+nameEN='The Little Prince'
+author='А. де Сент-Экзюпери'
+authorEN=' A. de Saint-Exupery'}
+
+{number='2'
+note='Держите вещи на расстоянии вытянутой руки … Если вы позволите чему-то подойти слишком близко, вы захотите держаться за это. И нет ничего, за что человек может держаться.'
+noteEN='Keep things at arm’s length… If you let anything come too near you want to hold on to it. And there is nothing a man can hold on to.'
+name='Три товарища'
+nameEN='The Three Comrades'
+author='Э. Мария Ремарк'
+authorEN='Remarque E. Maria'}
+
+{number='3'
+note='Художник должен создавать красивые вещи, но не должен вкладывать в них ничего из своей жизни.'
+noteEN='An artist should create beautiful things, but should put nothing of his own life into them.'
+name='Портрет Дориана Грея'
+nameEN='The Picture of Dorian Gray'
+author='Оскар Уайльд'
+authorEN='Oscar Wilde'}
+
+{number='4'
+note='Ты любишь всех, а любить всех – значит не любить никого. Тебе все одинаково безразличны'
+noteEN='You like every one; that is to say, you are indifferent to everyone.'
+name='Портрет Дориана Грея'
+nameEN='The Picture of Dorian Gray'
+author='Оскар Уайльд'
+authorEN='Oscar Wilde'}
+
+{number='5'
+note='Самые нелепые поступки человек совершает всегда из благороднейших побуждений'
+noteEN='Whenever a man does a thoroughly stupid thing, it is always from the noblest motives.'
+name='Портрет Дориана Грея'
+nameEN='The Picture of Dorian Gray'
+author='Оскар Уайльд'
+authorEN='Oscar Wilde'}
+
+{number='6'
+note='В жизни есть только две настоящие трагедии: одна — когда не получаешь того, чего хочешь, а вторая — когда получаешь. Страшнее вторая, так как, когда получаешь то, чего хочешь, чаще всего испытываешь разочарование.'
+noteEN='There are only two real tragedies in life: one is when you don't get what you want, and the second is when you get it. The second one is scarier, because when you get what you want, you are most often disappointed.'
+name='Веер леди Уиндермир'
+nameEN='Lady Windermere's fan.'
+author='Оскар Уайльд'
+authorEN='Oscar Wilde'}
+
+{number='7'
+note='Он действительно пережил смерть, но вернулся, потому что не мог вынести одиночества.'
+noteEN='He really had been through death, but he had returned because he could not bear the solitude.'
+name='Сто лет одиночества'
+nameEN='One Hundred Years Of Solitude'
+author='Г. Гарсия Маркес'
+authorEN='G. Garcia Marquez'}
+
+{number='8'
+note='Давайте научимся показывать нашу дружбу человеку, когда он жив, а не после того, как он умрет.'
+noteEN='Let us learn to show our friendship for a man when he is alive and not after he is dead.'
+name='Великий Гэтсби'
+nameEN='The Great Gatsby'
+author='Фрэнсис Скотт'
+authorEN='Francis Scott'}
+
+{number='9'
+note='Нет ничего более обманчивого, чем очевидный факт.'
+noteEN='There is nothing more deceptive than an obvious fact. '
+name='Приключения Шерлока Холмса'
+nameEN='The Adventures of Sherlock Holmes'
+author='Конан Дойл'
+authorEN='Conan Doyle'}
+
+{number='10'
+note='В этом мире неважно, сколько вы сделали. Самое главное — суметь убедить людей, что вы сделали много'
+noteEN='In this world, it doesn't matter how much you've done. The most important thing is to be able to convince people that you have done a lot'
+name='Этюд в багровых тонах'
+nameEN='A Study in Scarlet'
+author='Конан Дойл'
+authorEN='Conan Doyle'}
+
+{number='11'
+note='Весь мир сделан из веры, доверия и пыльцы фей.'
+noteEN='All the world is made of faith, and trust, and pixie dust'
+name='Питер Пэн'
+nameEN='Peter Pan'
+author='Джеймс Барри'
+authorEN='J. M. Barrie'}
+
+{number='12'
+note='“Теперь я сделал все, что мог,” подумал он. Это и было началом борьбы.'
+noteEN='Now I have done what I can, he thought. Let him begin to circle and let the fight come. '
+name='Старик и Море'
+nameEN='The Old Man and The Sea'
+author='Эрнест Хемингуэй'
+authorEN='Ernest Hemingway'}
+
+{number='13'
+note='Нужно бежать со всех ног, чтобы только оставаться на месте, а чтобы куда-то попасть, надо бежать как минимум вдвое быстрее!'
+noteEN='My dear, here we must run as fast as we can, just to stay in place. And if you wish to go anywhere you must run twice as fast as that.'
+name='Алиса в стране чудес'
+nameEN='Alice's Adventures in Wonderland'
+author='Льюис Кэрролл '
+authorEN='Lewis Carrol'}
+
+{number='14'
+note='И когда вы чего-то хотите, вся вселенная помогает вам достичь этого.'
+noteEN='And, when you want something, all the universe conspires in helping you to achieve it.'
+name='Алхимик'
+nameEN='The Alchemist'
+author='Пауло Коэльо'
+authorEN='Paulo Coelho'}
+
+{number='15'
+note='Некоторые из лучших людей, которые когда-либо жили, были такими же бедными, как и я; и если вы христианин, вы не должны считать бедность преступлением.'
+noteEN='Some of the best people that ever lived have been as destitute as I am; and if you are a Christian, you ought not to consider poverty a crime.'
+name='Джейн Эйр'
+nameEN='Jane Eyre'
+author='Шарлотта Бронте '
+authorEN='Charlotte Bronte'}
+
+{number='16'
+note='Через двадцать лет вы будете более разочарованы тем, что вы не делали, чем тем, что вы делали.'
+noteEN='Twenty years from now you will be more disappointed by the things that you didn’t do than by the ones you did do.'
+name='Облачный атлас'
+nameEN='Cloud Atlas'
+author='Дэвид Митчел'
+authorEN='David Mitchell'}
+
+{number='17'
+note='Это не так уж плохо, когда солнце выходит, но оно появляется только тогда, когда хочется выйти. '
+noteEN='It’s not too bad when the sun’s out, but it only comes out when it feels like coming out. '
+name='Над пропастью во ржи'
+nameEN='The catcher in the rye'
+author='Д. Д. Сэлинджер'
+authorEN='J. D. Salinger'}
+
+{number='18'
+note='Никогда не сожалей о том, что заставляет тебя улыбаться.'
+noteEN='Never regret anything that made you smile.'
+name=''
+nameEN=''
+author='Марк Твен'
+authorEN='Mark Twain'}
+
+{number='19'
+note='Сам того не ведая, он открыл великий закон, управляющий поступками людей, а именно: для того чтобы человек или мальчик страстно захотел обладать какой-нибудь вещью, пусть эта вещь достанется ему возможно труднее'
+noteEN='He had discovered a great law of human action, without knowing it — namely, that in order to make a mana boy covet a thing, it is only necessary to make the thing difficult to obtain.'
+name='Приключения Тома Сойера'
+nameEN='The Adventures of Tom Sawyer'
+author='Марк Твен'
+authorEN='Mark Twain'}
+
+{number='20'
+note='Если ты читаешь только те книги, которые читают остальные, ты будешь думать только то, что думают остальные.'
+noteEN='If you only read the books that everyone else is reading, you can only think what everyone else is thinking.'
+name='Норвежский лес'
+nameEN='Norwegian Wood'
+author='Харуки Мураками'
+authorEN='Haruki Murakami'}
+
+{number='21'
+note='Люби всех, доверяй избранным и никому не делай зла'
+noteEN='Love all, trust a few, do wrong to none.'
+name='Конец - делу венец'
+nameEN='All's Well That Ends Well'
+author='У. Шекспир'
+authorEN='W. Shakespeare'}
+
+{number='22'
+note='Всем жалуй ухо, голос – лишь немногим'
+noteEN='Give every man thy ear but few thy voice'
+name='Гамлет, принц Датский'
+nameEN='Hamlet, Prince of Denmark'
+author='У. Шекспир'
+authorEN='W. Shakespeare'}
+
+{number='23'
+note='Некоторых птиц в неволе не удержишь. Их перья слишком яркие. И когда они улетают, часть тебя понимает: нельзя держать их взаперти. Но то место, где ты живёшь, становится мрачнее после того, как они улетели.'
+noteEN='I have to remind myself that some birds aren’t meant to be caged. Their feathers are just too bright. And when they fly away the part of you that knows it was a sin to lock them up does rejoice. But still the place you live in is that much more drab and empty that they’re gone.'
+name='Побег из Шоушенка'
+nameEN='Escape from Shawshank'
+author='С.Кинг'
+authorEN='s. king'}
+
+{number='24'
+note='Когда они тебе говорят, что наступает конец мира - это они новые хлопья продают. Вот если они говорят "без паники" - это уже серьезно'
+noteEN='When they tell you that the end of the world is coming, they are selling new flakes. But if they say "don't panic" - this is serious'
+name='буря столетия'
+nameEN='The Storm of the Century'
+author='С.Кинг'
+authorEN='s. king'}
+
+
+{number='25'
+note='Гордость, та невидимая кость, которая удерживает шею крепко.'
+noteEN='Pride, that invisible bone that keeps the neck stiff.'
+name='Стрелок'
+nameEN='The Gunslinger'
+author='С.Кинг'
+authorEN='s. king'}
+
+{number='26'
+note='Подсознание пишет стихи, если оно осталось наедине с собой.	'
+noteEN='The unconscious mind writes poetry if it's left alone.'
+name='Думский Ключ'
+nameEN='Duma Key'
+author='С.Кинг'
+authorEN='s. king'}
+
+{number='27'
+note='В наших силах решать только что делать со временем, которое нам отпущено.'
+noteEN='All we have to decide is what to do with the time that is given to us.'
+name='Властелин Колец'
+nameEN='Lord of the Rings'
+author='Дж. Р. Р. Толкин'
+authorEN='J. R. R. Tolkien'}
+
+
+{number='28'
+note='Если живешь бок о бок с драконом, изволь с ним считаться.'
+noteEN='If you live side by side with a dragon, you have to reckon with it.'
+name='Хоббит, или Туда и обратно'
+nameEN='The Hobbit, or There and back'
+author='Дж. Р. Р. Толкин'
+authorEN='J. R. R. Tolkien'}
+
+{number='29'
+note='Еслиты не знаешь, чего хочешь, ты в итоге останешься с тем, чего точно не хочешь.'
+noteEN='If you don’t know what you want,» the doorman said, «you end up with a lot youdon’t.'
+name='Бойцовский клуб'
+nameEN='Fight Club'
+author='Чак Паланик'
+authorEN='C. Palahniuk'}
+
+{number='30'
+note='В наше время люди узнают, что они думают, по телевизору.'
+noteEN='Nowadays, people find out what they think on TV.'
+name='Generation "П"'
+nameEN='Generation "P"'
+author='Виктор Пелевин'
+authorEN='Victor Pelevin'}
+
+
+
+{number='31'
+note='Первое, к чему побуждает одиночество, – это разобраться с самим собой и со своим прошлым.'
+noteEN='The first thing that loneliness encourages is to deal with yourself and your past'
+name='Одинокий'
+nameEN='Lonely'
+author='А. Стриндберг'
+authorEN='A. Strindberg'}
+
+{number='32'
+note='Люди говорят: «Хорошо там, где нас нет». И это правда. Там, где вас нет, мне всегда хорошо.'
+noteEN='People say, "It's good where we're not." And it's true. Where you are not, I always feel good.'
+name='Родина дремлющих ангелов'
+nameEN='Homeland of the slumbering angels'
+author='Густав Водичка'
+authorEN='Gustav Vodichka'}
+
+{number='33'
+note='Истина нередко высказывается в форме шутки'
+noteEN='The truth is often expressed in the form of a joke'
+name='Война миров'
+nameEN='The War of the Worlds'
+author='Герберт Уэллс'
+authorEN='Herbert Wells'}
+
+{number='34'
+note='Не понимаю, как вы вообще живете без депрессии? Чем занимаетесь? Хохочете целыми днями?'
+noteEN='I don't understand how you live without depression at all? What do you do? Laughing all day?'
+name='Процесс'
+nameEN='Process'
+author='Франц Кафка'
+authorEN='Franz Kafka'}
+
+{number='35'
+note='Каждый должен что-то оставить после себя. Сына или книгу, или картину, выстроенный тобой дом, или хотя бы возведенную из кирпича стену, или сшитую тобой пару башмаков, или сад, посаженный твоими руками. Что-то, чего при жизни касались твои пальцы, в чем после смерти найдет прибежище твоя душа. Люди будут смотреть на взращенное тобою дерево или цветок, и в эту минуту ты будешь жив.'
+noteEN='Everyone has to leave something behind. A son, or a book, or a painting, a house built by you, or at least a brick wall built by you, or a pair of shoes sewn by you, or a garden planted by your hands. Something that your fingers touched during life, in which your soul will find refuge after death. People will look at the tree or flower you have grown, and at that moment you will be alive.'
+name='451° по Фаренгейту'
+nameEN='451° Fahrenheit'
+author='Рэй Брэдбери'
+authorEN='Ray Bradbury'}
+
+{number='36'
+note='Время. Какое странное понятие. Едва вы прочли эту фразу, как она уже в прошлом. Настоящего - того конкретного момента, когда вы воспринимали предыдущую фразу, - уже не существует, а будущее - это то, чем была эта фраза, пока вы ее не прочли'
+noteEN='Time. What a strange concept. As soon as you read this phrase, it is already in the past. The present - that particular moment when you perceived the previous phrase - no longer exists, and the future is what this phrase was until you read it'
+name='Иллюзия смерти'
+nameEN='The illusion of death'
+author='Франк Тилье'
+authorEN='Frank Thiele'}
+
+{number='37'
+note='— Эх, кабы, знать, что Принц тоже любит меня, можно было бы отправить ему в подарок вот этот чудесный цветок! — потрошила Принцесса свой гербарий. — А раз определенности нет — отправлю осиновый кол и дохлого кузнечика. Пусть анализирует!'
+noteEN='— Oh, if I knew that the Prince also loves me, I could send him this wonderful flower as a gift! — the Princess gutted her herbarium. — And if there is no certainty, I will send an aspen stake and a dead grasshopper. Let him analyze it!'
+name='Сказки про Принцессу'
+nameEN='Fairy tales about the Princess'
+author='Ю. Надеждинская'
+authorEN='J. Nadezhdinskaya'}
+
+{number='38'
+note='Не выходи из комнаты; считай, что тебя продуло.
+Что интересней на свете стены и стула?
+Зачем выходить оттуда, куда вернёшься вечером
+таким же, каким ты был, тем более — изувеченным?'
+noteEN='Don't leave the room; consider yourself blown.
+What is more interesting in the world than a wall and a chair?
+Why go out from there, where you will return in the evening
+the same as you were, especially mutilated?'
+name='Не выходи из комнаты'
+nameEN='Don't leave the room'
+author='Иосиф Бродский'
+authorEN='Joseph Brodsky'}
+
+{number='39'
+note='От тебя ни одного письма, ты уже теперь не Киса, а гусь лапчатый. Как это тебя так угораздило? '
+noteEN='Not a single letter from you, you are no longer a Kitty, but a goose with paws. How did this happen to you?'
+name='Из письма к Лиле Брик'
+nameEN='From a letter to Lila Brick'
+author='Маяковский'
+authorEN='Mayakovsky'}

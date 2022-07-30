@@ -5,20 +5,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.books.ActorAdder;
 import com.bytevalue.books.BookHandler;
 import com.bytevalue.books.Locket;
+import com.bytevalue.books.Money;
+import com.bytevalue.books.Score;
 
 public class GameStage extends Stage implements ActorAdder,Pauser {
 
-    private Locket locket;
+    private final Locket locket;
+    private final Score score;
 
     public GameStage(Viewport viewport, ActivitySwitcher activitySwitcher) {
         setViewport(viewport);
+        score = new Score(1250);
+        Money money = new Money();
 
-        BookHandler bookHandler = new BookHandler(viewport);
+        BookHandler bookHandler = new BookHandler(viewport, money);
         addActor(bookHandler);
 
-        TopBar topBar = new TopBar(viewport,activitySwitcher,this);
+        TopBar topBar = new TopBar(viewport,activitySwitcher,this,score, money);
 
-        locket =new Locket(viewport,bookHandler,topBar.getScore(),activitySwitcher);
+        locket =new Locket(viewport,bookHandler,score,activitySwitcher);
         locket.setModeStart();
         addActor(locket);
         addActor(topBar);
@@ -38,6 +43,6 @@ public class GameStage extends Stage implements ActorAdder,Pauser {
     }
 
     public int getScore() {
-        return locket.getScore();
+        return score.getScore();
     }
 }

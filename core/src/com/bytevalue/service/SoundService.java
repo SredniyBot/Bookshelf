@@ -13,6 +13,10 @@ public class SoundService {
     private static Sound menu1;
 
     private static Sound move;
+    private static Sound boom;
+    private static Sound peep;
+    private static Sound penny;
+    private static Sound paper;
 
 
     private static Sound shelfMove;
@@ -29,6 +33,10 @@ public class SoundService {
         menu1 = Gdx.audio.newSound(Gdx.files.internal(skin.getMenuSound()));
         move = Gdx.audio.newSound(Gdx.files.internal(skin.getMoveSound()));
         shelfMove = Gdx.audio.newSound(Gdx.files.internal(skin.getShelfSound()));
+        boom = Gdx.audio.newSound(Gdx.files.internal("sounds/utils/boom.wav"));
+        peep = Gdx.audio.newSound(Gdx.files.internal("sounds/utils/peep.wav"));
+        penny = Gdx.audio.newSound(Gdx.files.internal("sounds/utils/peny.wav"));
+        paper = Gdx.audio.newSound(Gdx.files.internal("sounds/utils/paper.wav"));
     }
 
 
@@ -96,7 +104,32 @@ public class SoundService {
             shelfMove.dispose();
         if (menu1!=null)
             menu1.dispose();
+        if (boom!=null)
+            boom.dispose();
+        if (peep!=null)
+            peep.dispose();
+        if (penny!=null)
+            penny.dispose();
 
+    }
+
+    public static void playBoomSound(){
+        if(snd)
+            boom.play(0.6f);
+    }
+    public static void playPeepSound(){
+        if(snd)
+            peep.play();
+    }
+
+
+    public static void playPennySound(){
+        if(snd)penny.play();
+    }
+    public static void playPaperSound(){
+        if(snd)paper.play();
+    }
+    public static void playBadMenuSound() {
 
     }
 }

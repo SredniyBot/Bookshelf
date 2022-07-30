@@ -8,6 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.BookSorter;
+import com.bytevalue.books.Score;
+import com.bytevalue.notes.Note;
+import com.bytevalue.notes.NoteStage;
 import com.bytevalue.service.SkinService;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.TextureService;
@@ -26,9 +29,12 @@ public class MainScreen implements Screen, ActivitySwitcher {
     private final SkinStage skinStage;
     private final QuiteStage quitStage;
     private final LossStage lossStage;
+    private final NotesStage notesStage;
+    private final NoteStage noteStage;
 
 
     private boolean gamePreDraw;
+    private boolean notesPreDraw;
     private boolean gamePreUpdate;
 
     public MainScreen() {
@@ -42,6 +48,8 @@ public class MainScreen implements Screen, ActivitySwitcher {
         skinStage=new SkinStage(mViewport,this);
         quitStage=new QuiteStage(mViewport,this);
         lossStage=new LossStage(mViewport,this);
+        notesStage=new NotesStage(mViewport,this);
+        noteStage=new NoteStage(mViewport,this);
         mActiveStage = startStage;
         gamePreDraw=true;
         gamePreUpdate=true;
@@ -65,6 +73,8 @@ public class MainScreen implements Screen, ActivitySwitcher {
             gameStage.act();
         mActiveStage.act(delta);
 
+        if(notesPreDraw)
+            notesStage.draw();
         if(gamePreDraw)
             gameStage.draw();
         mActiveStage.draw();
@@ -119,7 +129,7 @@ public class MainScreen implements Screen, ActivitySwitcher {
     public void switchActivity(Activity activity) {
         gamePreDraw=false;
         gamePreUpdate=false;
-
+        notesPreDraw=false;
         switch (activity){
             case GAME:
                 mActiveStage=gameStage;
@@ -151,8 +161,17 @@ public class MainScreen implements Screen, ActivitySwitcher {
                 lossStage.setScore(gameStage.getScore());
                 mActiveStage=lossStage;
                 break;
+            case NOTES:
+                mActiveStage=notesStage;
+                break;
+            case CLOSE_NOTE:
+                if (gameStage.isInStartPosition()){
+                    mActiveStage=notesStage;
+                }else {
+                    mActiveStage=gameStage;
+                }
+                break;
         }
-
     }
 
     @Override
@@ -164,6 +183,23 @@ public class MainScreen implements Screen, ActivitySwitcher {
     }
 
     @Override
+    public void openNote(Note note, float x, float y) {
+        if (note==null)return;
+        if (gameStage.isInStartPosition())
+            notesPreDraw=true;
+        else gamePreDraw=true;
+        noteStage.setNote(note,x,y);
+        mActiveStage=noteStage;
+    }
+
+    @Override
+    public void loseGame(Score score) {
+        gamePreDraw=true;
+        lossStage.setScore(score.getScore());
+        mActiveStage=lossStage;
+    }
+
+    @Override
     public void dispose() {
         gameStage.dispose();
         pauseStage.dispose();
@@ -172,6 +208,8 @@ public class MainScreen implements Screen, ActivitySwitcher {
         startStage.dispose();
         skinStage.dispose();
         quitStage.dispose();
+        notesStage.dispose();
+        noteStage.dispose();
         TextureService.dispose();
         SoundService.dispose();
     }

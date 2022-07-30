@@ -1,21 +1,24 @@
 package com.bytevalue.books;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.inter.Activity;
 import com.bytevalue.inter.ActivitySwitcher;
+import com.bytevalue.notes.NotesCollection;
 import com.bytevalue.service.SoundService;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Locket extends Group {
 
     private final Array<Bookshelf> bookshelves;
 
     private final Background background;
-    private Score score;
+    private final Score score;
 
     private float bias;
     private boolean shifting =false;
@@ -24,16 +27,21 @@ public class Locket extends Group {
     private final BookDisposer bookDisposer;        //constants of book positions
     private final BookHandler bookHandler;          //handle books while they are taken
 
-    private ActivitySwitcher activitySwitcher;
+    private final ActivitySwitcher activitySwitcher;
     private boolean startMenu=true;
     private int numberOfShelves=6;
+
+    private boolean hasStone=false;
+    private int vanish;
+    private int boom;
+
 
     public Locket(Viewport viewport, BookHandler bookHandler, Score score, ActivitySwitcher activitySwitcher){
         this.bookHandler=bookHandler;
         this.activitySwitcher=activitySwitcher;
         this.score=score;
         bookHandler.setBookshelfCollection(this);
-        bookGenerator =new BookGenerator();
+        bookGenerator =new BookGenerator(score);
         bookshelves=new Array<>();
         bookDisposer = new BookDisposer(viewport);
         background = new Background(bookDisposer);
@@ -46,8 +54,7 @@ public class Locket extends Group {
 
     @Override
     public void act(float delta) {
-
-        if(isShifting()){
+            if(isShifting()){
             if(bias>1){
                 float velocity= (bias * delta *5);
                 bookDisposer.increaseBias(velocity);
@@ -70,11 +77,10 @@ public class Locket extends Group {
     }
 
     private void deleteBookshelf(Bookshelf bookshelf) {
+        if (bookshelf.containsStone())hasStone=false;
         bookshelves.removeValue(bookshelf,false);
         bookshelf.dispose();
     }
-
-
 
     public void complete(){
         bookshelves.sort(new Comparator<Bookshelf>() {
@@ -94,25 +100,22 @@ public class Locket extends Group {
             }
         });
         int s = bookshelves.indexOf(bookshelf,false);
-        HashMap<Integer,Integer> map= new HashMap<>();
-        for (int i=s+1;i<6;i++){
-            for (Integer key:bookshelves.get(i).getBooksIds().keySet()){
-                if (map.containsKey(key)){
-                    map.put(key,map.get(key)+bookshelves.get(i).getBooksIds().get(key));
-                }else {
-                    map.put(key,bookshelves.get(i).getBooksIds().get(key));
-                }
-            }
-        }
+
+        HashMap<Integer,Integer> map=getBookStatisticsStartsFromId(s+1);
 
         Array<Array<Integer>> books = bookGenerator.generate(map,s+1);
         score.increaseScore(s+1);
         float y=bookshelf.getY();
+
+
+        Array<Bookshelf> newBookshelves=new Array<>();
         for (int i=0;i<=s;i++){
-            Bookshelf newBookshelf=new Bookshelf(numberOfShelves++,bookDisposer,bookHandler,books.get(i));
-            bookshelves.add(newBookshelf);
+            Bookshelf newBookshelf=new Bookshelf(numberOfShelves++,bookDisposer,bookHandler,books.get(i),generateVanish(),generateBoom());
+            newBookshelves.add(newBookshelf);
             for (Book book:newBookshelf.getBooks()) addActor(book);
         }
+        addStone(newBookshelves);
+        bookshelves.addAll(newBookshelves);
         startBias(y);
     }
 
@@ -123,36 +126,26 @@ public class Locket extends Group {
     }
 
 
-    public void generateBookshelves(){
-        Array<Array<Integer>> newBooks =bookGenerator.generateNew(6);
-        for (int i=0;i<6;i++){
-            Bookshelf bookshelf=new Bookshelf(i,bookDisposer,bookHandler,newBooks.get(i));
-            bookshelves.add(bookshelf);
-            for (Book book:bookshelf.getBooks())    addActor(book);
-        }
-    }
-
     public void generateStartBookshelves(){
         Array<Integer> newBooks1 = new Array<>();
         Array<Integer> newBooks2 = new Array<>();
         for (int i=0;i<11;i++)newBooks1.add(0);
         newBooks2.add(1);
         newBooks2.add(0);
-        Bookshelf bookshelf=new Bookshelf(5,bookDisposer,bookHandler,newBooks1);
-        Bookshelf bookshelf2=new Bookshelf(0,bookDisposer,bookHandler,newBooks2);
+        Bookshelf bookshelf=new Bookshelf(5,bookDisposer,bookHandler,newBooks1,false,0);
+        Bookshelf bookshelf2=new Bookshelf(0,bookDisposer,bookHandler,newBooks2,false,0);
         bookshelves.add(bookshelf);
         bookshelves.add(bookshelf2);
-        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
-        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
-        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
-        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>()));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>(),false,0));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>(),false,0));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>(),false,0));
+        bookshelves.add(new Bookshelf(-3,bookDisposer,bookHandler,new Array<Integer>(),false,0));
         for (Book book:bookshelf.getBooks()) {
             addActor(book);
-            book.setCanBeLifted(false);
+            book.setCanBeLifted(false,true,false);
         }
         for (Book book:bookshelf2.getBooks()) addActor(book);
     }
-
 
 
     public Array<Bookshelf> getBookshelves() {
@@ -164,14 +157,9 @@ public class Locket extends Group {
     }
 
 
-
-    public BookDisposer getBookDisposer() {
-        return bookDisposer;
-    }
-
-
     public void setModeStart() {
         bookHandler.setWaiting(true);
+        bookHandler.renew();
         for (int i=bookshelves.size-1;i>=0;i--)deleteBookshelf(bookshelves.get(i));
         startMenu=true;
         background.setModeStartMenu(true);
@@ -185,6 +173,22 @@ public class Locket extends Group {
         bookHandler.setWaiting(false);
     }
 
+
+    public HashMap<Integer,Integer> getBookStatisticsStartsFromId(int startId){
+        HashMap<Integer,Integer> map= new HashMap<>();
+        for (int i=startId;i<6;i++){
+            for (Integer key:bookshelves.get(i).getBooksIds().keySet()){
+                if (map.containsKey(key)){
+                    map.put(key,map.get(key)+bookshelves.get(i).getBooksIds().get(key));
+                }else {
+                    map.put(key,bookshelves.get(i).getBooksIds().get(key));
+                }
+            }
+        }
+        return map;
+    }
+
+
     public void deactivateStartMenu(){
         startMenu=false;
         background.setModeStartMenu(false);
@@ -195,7 +199,51 @@ public class Locket extends Group {
         return startMenu;
     }
 
-    public int getScore() {
-        return score.getScore();
+
+    public void addStone(Array<Bookshelf> bookshelves){
+        if (hasStone)return;
+        if (score.getScore()/50<new Random().nextInt(10))return;
+        Bookshelf b=bookshelves.random();
+        if (b.getBooks().size==0)return;
+        b.getBooks().random().setCanBeLifted(false,false,true);
+        hasStone=true;
     }
+
+    public void spawnNewNote(Vector2 noteFromBook) {
+        activitySwitcher.openNote(NotesCollection.newRandomNote(),noteFromBook.x,noteFromBook.y);
+    }
+
+    public void lose() {
+
+        activitySwitcher.loseGame(score);
+        setModeStart();
+    }
+
+    public boolean generateVanish(){
+        return (Math.min(score.getScore()/100+1,10)>new Random().nextInt(20));
+    }
+
+    public int generateBoom(){
+        int count=0;
+        if (score.getScore()<80){
+            if (new Random().nextInt(20)==0)count=1;
+        }
+        else if (score.getScore()<200){
+            if (new Random().nextInt(15)==0)count=1;
+            if (new Random().nextInt(30)==0) count=2;
+        }
+        else if (score.getScore()<350){
+            if (new Random().nextInt(10)==0)count=1;
+            if (new Random().nextInt(20)==0) count=2;
+            if (new Random().nextInt(50)==0) count=3;
+        } else if (score.getScore()<600){
+            if (new Random().nextInt(8)==0)count=1;
+            if (new Random().nextInt(15)==0) count=2;
+            if (new Random().nextInt(30)==0) count=3;
+            if (new Random().nextInt(50)==0) count=4;
+        }
+        else count=new Random().nextInt(5);
+        return count;
+    }
+
 }

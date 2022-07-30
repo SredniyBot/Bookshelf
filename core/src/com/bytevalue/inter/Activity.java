@@ -8,5 +8,7 @@ public enum Activity {
     THEMES,
     NOTES,
     LOST,
+    NOTE,
+    CLOSE_NOTE,
     QUITE
 }

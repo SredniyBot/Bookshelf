@@ -2,21 +2,22 @@ package com.bytevalue.service;
 
 public enum Skin {
 
-    USUAL(18,"usual","#c0a588",0),
+    USUAL(18,"usual","#c0a588","#453125",0),
 
-    HALLOWEEN(6,"halloween","#a89dcf",1),
+    HALLOWEEN(6,"halloween","#a89dcf","#383445",1),
 
-    NEON(6,"neon","#c0a588",2);
+    NEON(6,"neon","#dab7c8","#222323",2);
 
     private final int bookCount,number;
-    private final String  folder, fontColor;
+    private final String  folder, scoreColor,notesColor;
 
-    Skin(int bookCount,String folder,String fontColor,int number){
+    Skin(int bookCount,String folder,String scoreColor,String notesColor,int number){
         this.number=number;
         this.folder=folder;
         this.bookCount = bookCount;
 
-        this.fontColor=fontColor;
+        this.scoreColor=scoreColor;
+        this.notesColor=notesColor;
     }
 
     public int getBookCount(){
@@ -50,9 +51,15 @@ public enum Skin {
         return "themes/"+folder+"/shelf.png";
     }
 
-    public String getFontColor() {
-        return fontColor;
+    public String getScoreColor() {
+        return scoreColor;
     }
+
+    public String getNotesColor() {
+        return notesColor;
+    }
+
+
 
     public int getNumber(){
         return number;
@@ -92,6 +99,13 @@ public enum Skin {
             return "themes/"+folder+"/lossRU.png";
         else
             return "themes/"+folder+"/lossEN.png";
+    }
+
+    public String getNotesMenuFile(boolean ru) {
+        if (ru)
+            return "themes/"+folder+"/notesRU.png";
+        else
+            return "themes/"+folder+"/notesEN.png";
     }
 
 

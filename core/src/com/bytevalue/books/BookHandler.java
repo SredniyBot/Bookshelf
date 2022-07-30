@@ -8,6 +8,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.VibrationService;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
 public class BookHandler extends Actor {
 
 
@@ -17,10 +20,13 @@ public class BookHandler extends Actor {
     private boolean bookPressured =false;
 
     private boolean isWaiting=false;
-    private Viewport viewport;
+    private final Viewport viewport;
     private Locket locket;
 
-    public BookHandler(Viewport viewport){
+    private final Money money;
+
+    public BookHandler(Viewport viewport,Money money){
+        this.money=money;
         this.viewport=viewport;
         selectedBooks=new Array<>();
     }
@@ -36,6 +42,7 @@ public class BookHandler extends Actor {
         selectedBooks.addAll(book.getGoodNeighbours());
         bookPressured=true;
         for (Book selected:selectedBooks){
+            if (selected.shakeOutBookmark())money.spawnPenny(selected.getRealX()+1,selected.getRealY()+140);
             selected.setSelected(true);
             selected.setZIndex(100000);
         }
@@ -63,6 +70,8 @@ public class BookHandler extends Actor {
 
     public void release() {
         bookPressured=false;
+        Vector2 noteFromBook=null;
+
         if(currentBookshelf==null){
             for (Book book:selectedBooks){
                 book.startReturning();
@@ -71,6 +80,10 @@ public class BookHandler extends Actor {
             containerOfSelectedBooks.returnBooks(selectedBooks);
             VibrationService.vibrate(40);
         }else {
+            for (Book book:selectedBooks){
+                Vector2 v = book.shakeOutNote();
+                if (v!=null)noteFromBook=v;
+            }
             Array<Book> extraBooks=currentBookshelf.insertBooks(selectedBooks);
             for (Book book:extraBooks){
                 book.startReturning();
@@ -78,15 +91,44 @@ public class BookHandler extends Actor {
             }
             containerOfSelectedBooks.returnBooks(extraBooks);
 
-            if (currentBookshelf.isDone())
+            if (currentBookshelf.isDone()){
                 locket.complete(currentBookshelf);
+                noteFromBook=null;
+            }
         }
         selectedBooks.clear();
         currentBookshelf=null;
 
         SoundService.playStandSound();
+
+        if(noteFromBook!=null&&!locket.isStartMenu()){
+            locket.spawnNewNote(noteFromBook);
+        }
     }
 
+    public HashMap<Integer,Integer> getBookshelfStatistics(){
+        HashMap<Integer,Integer> map= locket.getBookStatisticsStartsFromId(0);
+        for (Integer key:getBooksIds().keySet()){
+            if (map.containsKey(key)){
+                map.put(key,map.get(key)+getBooksIds().get(key));
+            }else {
+                map.put(key,getBooksIds().get(key));
+            }
+        }
+        return map;
+    }
+
+    private HashMap<Integer,Integer> getBooksIds(){
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for (Book book:selectedBooks){
+            if(map.containsKey(book.getId())){
+                map.put(book.getId(),map.get(book.getId())+1);
+            }else {
+                map.put(book.getId(),1);
+            }
+        }
+        return map;
+    }
 
     public boolean isBookPressured() {
         return bookPressured;
@@ -98,6 +140,42 @@ public class BookHandler extends Actor {
 
     public void setWaiting(boolean waiting) {
         isWaiting = waiting;
+    }
+
+    public Array<Book> getTwoRandomBooks(){
+        Array<Book> books = new Array<>();
+        Array<Book> res = new Array<>();
+        for (Bookshelf bookshelf:locket.getBookshelves())books.addAll(bookshelf.getBooks());
+        Iterator<Book> bookIterator = books.iterator();
+        books.shuffle();
+        int count=0;
+        while (bookIterator.hasNext()){
+            Book book = bookIterator.next();
+            if (!(book.isDisappearing()||book.isVanishBook()||book.isBoomBook())){
+                count++;
+                res.add(book);
+                if (count==2)break;
+            }
+        }
+
+        return res;
+    }
+
+    public void addActor(Book book){
+        locket.addActor(book);
+    }
+
+    public void checkLose(){
+        for (Integer in:getBookshelfStatistics().values()){
+            if (in==12)return;
+        }
+        locket.lose();
+    }
+
+    public void renew() {
+        for (Book book:selectedBooks)book.remove();
+        selectedBooks.clear();
+        bookPressured=false;
     }
 }
 

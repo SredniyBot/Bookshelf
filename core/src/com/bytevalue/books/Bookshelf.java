@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.bytevalue.service.SoundService;
 import com.bytevalue.service.VibrationService;
 
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class Bookshelf implements BookContainer {
@@ -22,14 +23,17 @@ public class Bookshelf implements BookContainer {
     private Array<Book> books;
 
 
-    Bookshelf(int yIndex, BookDisposer bookDisposer, BookHandler bookHandler,Array<Integer> newBooks){
+    Bookshelf(int yIndex,
+              BookDisposer bookDisposer,
+              BookHandler bookHandler,
+              Array<Integer> newBooks,boolean vanish,int countBoom){
         this.bookDisposer = bookDisposer;
         this.bookHandler=bookHandler;
         this.yIndex=yIndex;
         bookshelfRectangle =new Rectangle();
         bookPositions=createBookPositions();
         resetPositions();
-        fillWithBooks(newBooks);
+        fillWithBooks(newBooks,vanish,countBoom);
     }
 
     private void deleteBooks(){
@@ -40,17 +44,33 @@ public class Bookshelf implements BookContainer {
     }
 
 
-    private void fillWithBooks(Array<Integer> input){
+    private void fillWithBooks(Array<Integer> input,boolean vanish,int countBoom){
         books=new Array<>();
-        int i=0;
+        Array<Integer> pos = new Array<>();
+        for (int i=0;i<input.size;i++)pos.add(i);
+        pos.shuffle();
         for (int num:input){
-            Book book=new Book(num,i,bookHandler,this);
-            book.setZIndex(1);
+            Book book;
+            if(vanish){
+                vanish=false;
+                book=new VanishingBook(num,pos.pop(),bookHandler,this);
+            }else if(countBoom>0){
+                book=new BoomBook(num,pos.pop(),bookHandler,this);
+                countBoom--;
+            }else {
+                book=new Book(num,pos.pop(),bookHandler,this);
+                book.setZIndex(1);
+            }
             book.setViewport(bookDisposer.getViewport());
             book.setVisible(true);
             books.add(book);
-            i++;
         }
+        books.sort(new Comparator<Book>() {
+            @Override
+            public int compare(Book book, Book t1) {
+                return Integer.compare(book.getPositionNumber(),t1.getPositionNumber());
+            }
+        });
     }
 
     private Array<Rectangle> createBookPositions(){
@@ -86,19 +106,34 @@ public class Bookshelf implements BookContainer {
         int pos= book.getPositionNumber()-1;
         boolean next=true;
         while (pos>=0&&next){
-            if(books.get(pos).getId()==book.getId())goodNeighbours.add(books.get(pos));
+            if(books.get(pos).canBeLifted()&&books.get(pos).getId()==book.getId())goodNeighbours.add(books.get(pos));
             else next=false;
             pos--;
         }
         next=true;
         pos=book.getPositionNumber()+1;
         while (pos<books.size&&next){
-            if(books.get(pos).getId()==book.getId())goodNeighbours.add(books.get(pos));
+            if(books.get(pos).canBeLifted()&&books.get(pos).getId()==book.getId())goodNeighbours.add(books.get(pos));
             else next=false;
             pos++;
         }
         return goodNeighbours;
     }
+
+    @Override
+    public Array<Book> getTwoNeighbours(Book book) {
+        Array<Book> goodNeighbours=new Array<>();
+        int pos= book.getPositionNumber()-1;
+        if (pos>=0){
+            goodNeighbours.add(books.get(pos));
+        }
+        pos=book.getPositionNumber()+1;
+        if (pos<books.size){
+            goodNeighbours.add(books.get(pos));
+        }
+        return goodNeighbours;
+    }
+
 
     @Override
     public int getBookWidth() {
@@ -108,6 +143,25 @@ public class Bookshelf implements BookContainer {
     @Override
     public int getBookHeight() {
         return (int) bookDisposer.getBookHeight();
+    }
+
+    @Override
+    public void commitRemove(Book book) {
+        books.removeValue(book,false);
+        bookHandler.checkLose();
+        collectBooks();
+    }
+
+    @Override
+    public void changeBookType(Book book) {
+        int i=books.indexOf(book,false);
+        Book book1 = new VanishingBook(book);
+        book1.setViewport(bookDisposer.getViewport());
+        book1.setVisible(true);
+        bookHandler.addActor(book1);
+        books.set(i,book1);
+//        books.removeIndex(i);
+
     }
 
     @Override
@@ -250,5 +304,10 @@ public class Bookshelf implements BookContainer {
 
     public void dispose() {
         deleteBooks();
+    }
+
+    public boolean containsStone() {
+        for (Book book:books)if (!book.canBeLifted()&&!book.isStartBook())return true;
+        return false;
     }
 }

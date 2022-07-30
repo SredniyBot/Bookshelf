@@ -13,7 +13,7 @@ public class SkinService {
         currentSkin = Skin.getSkinById(preferences.getInteger("skin",0));
         TextureService.init(currentSkin);
         SoundService.init(currentSkin);
-        FontService.init(currentSkin.getFontColor());
+        FontService.init(currentSkin.getScoreColor(), currentSkin.getNotesColor());
     }
 
 
@@ -24,6 +24,7 @@ public class SkinService {
         preferences.flush();
         TextureService.init(currentSkin);
         SoundService.init(currentSkin);
+        FontService.init(currentSkin.getScoreColor(), currentSkin.getNotesColor());
     }
 
     public static Skin getCurrentSkin() {

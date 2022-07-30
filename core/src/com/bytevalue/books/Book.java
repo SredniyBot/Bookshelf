@@ -1,6 +1,7 @@
 package com.bytevalue.books;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.bytevalue.service.TextureService;
@@ -15,15 +16,23 @@ public class Book extends BookLocation implements Comparable<Book>{
     private final Vector2 destination;
 
     private boolean canBeLifted =true;
+    private boolean needsStoneTexture =false;
+    private boolean startBook =false;
 
     private boolean isDisappearing=false;
     private int phaseOfDisappear = 0;
+
+    private boolean bookmarked=false;
+    private boolean notebook=false;
+
 
 
     Book(int id,int positionNumber,BookHandler bookHandler,BookContainer bookContainer){
         this.id=id;
         this.positionNumber=positionNumber;
         this.bookHandler = bookHandler;
+        if (new RandomXS128().nextInt(35)==0)bookmarked=true;
+        if (new RandomXS128().nextInt(300)==0)notebook=true;
         destination=new Vector2(0,0);
         setBookContainerF(bookContainer);
         setZIndex(100);
@@ -75,6 +84,11 @@ public class Book extends BookLocation implements Comparable<Book>{
         batch.draw(TextureService.getBookTextureById(id), getRealX(), getRealY(),
                 getOriginX(), getOriginY(),
                 getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        if(needsStoneTexture){
+            batch.draw(TextureService.getStoneTexture(), getRealX(), getRealY(),
+                    getOriginX(), getOriginY(),
+                    getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        }
     }
 
     @Override
@@ -113,8 +127,6 @@ public class Book extends BookLocation implements Comparable<Book>{
         startReturning();
     }
 
-
-
     public void animateDisappearing(float f){
         if (phaseOfDisappear ==0)
             setScaleY(getScaleY()-f*4);
@@ -125,19 +137,74 @@ public class Book extends BookLocation implements Comparable<Book>{
         } else if(phaseOfDisappear ==2){
             setScaleY(0);
             setScaleX(0);
+            remove();
+            getBookContainer().commitRemove(this);
         }
         if (getScaleY()<=0.3) phaseOfDisappear =1;
         if (getScaleX()<=0) phaseOfDisappear =2;
 
     }
 
-
     public void disappear(){
         isDisappearing=true;
         canBeLifted=false;
     }
 
-    public void setCanBeLifted(boolean canBeLifted) {
+    public boolean shakeOutBookmark() {
+        if (bookmarked){
+            bookmarked=false;
+            return true;
+        }
+        return false;
+    }
+
+    public Vector2 shakeOutNote() {
+        if (notebook){
+            notebook=false;
+            return new Vector2(getRealX(),getRealY());
+        }
+        return null;
+    }
+
+    public void setCanBeLifted(boolean canBeLifted,boolean startBook,boolean needsStoneTexture) {
         this.canBeLifted = canBeLifted;
+        this.startBook = startBook;
+        this.needsStoneTexture=needsStoneTexture;
+    }
+
+    public boolean canBeLifted() {
+        return canBeLifted;
+    }
+
+    public boolean isStartBook() {
+        return startBook;
+    }
+
+    public Array<Book> getTwoNeighbours(){
+        return getBookContainer().getTwoNeighbours(this);
+    }
+
+    public void startVanish(){
+        getBookContainer().changeBookType(this);
+        remove();
+    }
+
+    public BookHandler getBookHandler() {
+        return bookHandler;
+    }
+
+    public boolean isStone() {
+        return needsStoneTexture;
+    }
+
+    public boolean isDisappearing() {
+        return isDisappearing;
+    }
+
+    public  boolean isBoomBook(){
+        return false;
+    }
+    public  boolean isVanishBook(){
+        return false;
     }
 }

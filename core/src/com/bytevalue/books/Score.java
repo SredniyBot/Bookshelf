@@ -1,24 +1,29 @@
 package com.bytevalue.books;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Align;
 import com.bytevalue.service.FontService;
 
 public class Score extends Actor {
 
     private Integer score=0;
-    private String print;
     private Integer increasePart=0;
     private long time=0;
+    private final GlyphLayout layout;
+    private int y;
 
-    public Score(){
-        print=String.valueOf(score);
+    public Score(int y){
+        this.y=y;
+        layout = new GlyphLayout();
+        layout.setText(FontService.getFont(),String.valueOf(score), FontService.getScoreColor(),1280, Align.center,true);
         setZIndex(500);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        FontService.getScoreFont().draw(batch,print,400,1250);
+        FontService.getFont().draw(batch,layout,0,y);//400
     }
 
     @Override
@@ -28,7 +33,7 @@ public class Score extends Actor {
                 time=System.currentTimeMillis();
                 score++;
                 increasePart--;
-                print=String.valueOf(score);
+                layout.setText(FontService.getFont(),String.valueOf(score), FontService.getScoreColor(),1280, Align.center,true);
             }
         }
     }
@@ -39,7 +44,7 @@ public class Score extends Actor {
 
     public void toZero() {
         score=0;
-        print=String.valueOf(score);
+        layout.setText(FontService.getFont(),String.valueOf(score), FontService.getScoreColor(),1280, Align.center,true);
     }
 
     public int getScore() {

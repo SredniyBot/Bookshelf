@@ -12,7 +12,6 @@ public class PauseButton extends Button {
     private final ActivitySwitcher activitySwitcher;
     private final Pauser pauser;
 
-
     public PauseButton(Viewport viewport, ActivitySwitcher activitySwitcher,Pauser pauser){
         super(viewport);
         this.pauser=pauser;

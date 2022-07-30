@@ -4,19 +4,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.bytevalue.BookSorter;
+import com.bytevalue.books.Money;
 import com.bytevalue.books.Score;
 import com.bytevalue.service.TextureService;
 
 public class TopBar extends Group {
 
-
-    private final Score score;
-
-    public TopBar(Viewport viewport, ActivitySwitcher activitySwitcher,Pauser pauser) {
+    public TopBar(Viewport viewport, ActivitySwitcher activitySwitcher,Pauser pauser,Score score,Money money) {
         PauseButton pauseButton = new PauseButton(viewport,activitySwitcher,pauser);
         addActor(pauseButton);
-        score = new Score();
         addActor(score);
+        addActor(money);
     }
 
     @Override
@@ -26,7 +24,4 @@ public class TopBar extends Group {
         super.draw(batch, parentAlpha);
     }
 
-    public Score getScore(){
-        return score;
-    }
 }
