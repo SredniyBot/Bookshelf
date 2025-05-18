@@ -1,35 +1,24 @@
 # BookSorter
+![logo](https://github.com/user-attachments/assets/bb2e68a8-ccdb-4f71-936d-9f12b7fae2d2)
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+Один из моих старых проектов 
 
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
+Игра сделана на движке Libgdx
 
-## Platforms
+Мобильная версия опубликована в GooglePlay и Rustore. Также есть десктопная версия, но она нигде не публиковалась
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
-- `android`: Android mobile platform. Needs Android SDK.
+Игра поддерживает русский и английский языки, а также содержит 3 разные темы
 
-## Gradle
+Проект вероятно заброшен, дальнейшее развитие не планируется
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+https://www.rustore.ru/catalog/app/ru.bytevalue
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `android:lint`: performs Android project validation.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+![1](https://github.com/user-attachments/assets/4d644a81-dc28-4660-8405-bde19a9ed57b)
+![2](https://github.com/user-attachments/assets/c94e877d-7d1c-4997-9565-f22440ffaa1b)
+![3](https://github.com/user-attachments/assets/dc776a41-1b1d-46bc-931e-e441c01e70b2)
+![4](https://github.com/user-attachments/assets/a3cbd8e4-a41d-42a2-ae3b-7107bea570ae)
+![5](https://github.com/user-attachments/assets/a8db939b-a860-4865-b0d3-5376de4223d3)
+![6](https://github.com/user-attachments/assets/f4417256-aa9d-440f-adeb-dd4fa34eb59a)
+![7](https://github.com/user-attachments/assets/f27a8e1a-65ac-4297-89be-88743304f503)
+![8](https://github.com/user-attachments/assets/5b669c35-d823-478d-a700-47a3d1ec2f72)
+![9](https://github.com/user-attachments/assets/a7575ded-7eb8-4c89-ba3d-15dd0d0affd9)
